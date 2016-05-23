@@ -18,9 +18,11 @@ var _request = require('request');
 
 var _request2 = _interopRequireDefault(_request);
 
-var Linkedin = require('node-linkedin')('app-id', 'secret', 'callback');
-
 // import chalk from 'chalk';
+var clientID = '759dlh2okqws42';
+var clientSecret = 'OnnN8xW3X5zecdei';
+
+// var Linkedin = require('node-linkedin')(clientID, clientSecret, 'callback');
 
 var router = _express2['default'].Router();
 var jsonParser = _bodyParser2['default'].json();
@@ -29,12 +31,9 @@ router.get('/', function (req, res) {
   res.send('index');
 });
 
-router.get('/linkedin', function (req, res) {
-  (0, _request2['default'])('', function (error, response, body) {
-    if (!error && response.statusCode === 200) {
-      console.log('err');
-    }
-  });
+router.get('/oauth/linkedin', function (req, res) {
+  res.send('oauth');
+  // Linkedin.auth.authorize(res, scope);
 });
 
 exports['default'] = router;
