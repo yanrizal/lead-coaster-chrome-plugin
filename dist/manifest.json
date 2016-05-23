@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+
+  "name": "Lead Coaster",
+  "description": "chrome browser plugin that automatically visits LinkedIn profiles based on a search string",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "folder.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "https://ajax.googleapis.com/"
+  ]
+}

@@ -1,0 +1,39 @@
+body{
+	background: #1B2B34;
+	margin: 0;
+}
+h1{
+	font-family: 'Arial';
+	margin-top: 15%;
+	text-align: center;
+	color:#D75E67;
+}
+
+.menu{
+	position: fixed;
+	width: 100%;
+	bottom: 0;
+	background: #303F47;
+	height: 50px;
+}
+
+.menu p{
+	margin: 0;
+	text-align: center;
+}
+
+.menu button{
+	margin-top: 15px;
+	padding: 2px 0 4px;
+	margin-right: 5px;
+	cursor: pointer;
+	width: 70px;
+	border:none;
+	border-radius: 10px;
+	color:#FFF;
+	outline:none;
+}
+
+.menu button:hover{
+	text-decoration: underline;
+}
