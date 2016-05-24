@@ -4,13 +4,15 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'eval',
   entry: [
-    './content.js'
+    './src/public/js/coaster-redux/index.js'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'content.js'
+    path: './src/public/dist',
+    filename: 'main.js'
   },
   externals: {
+    "react": "React",
+    "react-dom": "ReactDOM",
     "jquery": "$"
   },
   devtool: 'source-map',
@@ -21,7 +23,7 @@ module.exports = {
             loader: 'babel-loader',
             exclude: /node_modules/,
             query: {
-                presets: ['es2015', 'stage-0']
+                presets: ['es2015', 'stage-0', 'react']
             }
           }
     ]
