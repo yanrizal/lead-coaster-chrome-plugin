@@ -1,0 +1,13 @@
+body{
+	background: #1B2B34;
+	margin: 10px;
+}
+
+table{
+	background: #FFF;
+	margin-top: 60px;
+}
+
+.nav li{
+	cursor: pointer;
+}
