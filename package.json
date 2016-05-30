@@ -7,7 +7,7 @@
     "build-ext": "node_modules/babel/bin/babel.js content.js --source-maps --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src --source-maps -d build --ignore public",
-    "start": "babel-node src/server.js",
+    "start": "nodemon --exec babel-node -- src/server.js",
     "lint": "./node_modules/.bin/eslint src",
     "db": "mongod --dbpath data/"
   },

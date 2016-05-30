@@ -8,7 +8,6 @@ const clientID = '759dlh2okqws42';
 const clientSecret = 'OnnN8xW3X5zecdei';
 
 // var Linkedin = require('node-linkedin')(clientID, clientSecret, 'callback');
-
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
@@ -16,9 +15,17 @@ router.get('/', (req, res) => {
   res.render('index', { title: 'nice' });
 });
 
-router.get('/oauth/linkedin', (req, res) => {
-  res.send('oauth');
-  // Linkedin.auth.authorize(res, scope);
+// router.get('/oauth/linkedin', (req, res) => {
+//   res.send('oauth');
+//   // Linkedin.auth.authorize(res, scope);
+// });
+
+router.post('/post/url', jsonParser, (req, res) => {
+  const params = {
+    url: req.body.url
+  };
+  console.log(params.url);
+  res.json(params.url);
 });
 
 router.get('/scrape/profile', (req, res) => {
