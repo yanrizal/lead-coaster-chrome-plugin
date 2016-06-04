@@ -12,6 +12,9 @@
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
         font-size: 10px;
       }
+      #content{
+        width: 220px;
+      }
       #status {
         /* avoid an excessively wide status text */
         white-space: pre;
@@ -38,9 +41,9 @@
     <script src="content.js"></script>
   </head>
   <body>
-    <input id="search" type="text"><button id="find">Find</button>
-    <div id="status"></div>
-    <img id="image-result" hidden>
+    <div id="content">
+    <input id="search" type="text"><button id="find">Run</button>
+    </div>
   </body>
 </html>
 

@@ -16,12 +16,12 @@ const getCurrentTabUrl = (callback) => {
 };
 
 const renderStatus = (statusText) => {
-  document.getElementById('status').textContent = statusText;
+  //document.getElementById('status').textContent = statusText;
 };
 
 document.addEventListener('DOMContentLoaded', () => {
   getCurrentTabUrl((url) => {
-    renderStatus(url);
+    //renderStatus(url);
   });
   const findBtn = document.getElementById('find');
   findBtn.addEventListener('click', () => {
