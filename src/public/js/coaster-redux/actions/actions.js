@@ -9,13 +9,56 @@ function requestPosts() {
 }
 
 export const RECEIVE_POSTS = 'RECEIVE_POSTS';
-function receivePosts(json) {
+function receivePosts(type, json) {
   return {
     type: RECEIVE_POSTS,
     posts: json.data,
     meta: json.meta,
     status: json.status,
     receivedAt: Date.now(),
+  };
+}
+
+export const IS_LOGIN = 'IS_LOGIN';
+function isLog(isLogin){
+  console.log(isLogin);
+  return {
+    type: IS_LOGIN,
+    value: isLogin
+  }
+}
+
+
+export function isLogin(){
+  return dispatch => {
+    const isLogin = document.getElementById('isLogin').value;
+    //console.log(isLogin)
+    dispatch(isLog(isLogin));
+  }
+}
+
+export function signupPost(email, password) {
+  return dispatch => {
+    NProgress.start();
+    dispatch(requestPosts());
+    return $.ajax({
+      url: '/signup',
+      dataType: 'json',
+      cache: false,
+      type: 'post',
+      data: {
+        email: email,
+        password: password
+      },
+      success: function(response) {
+        console.log(response);
+        NProgress.done();
+        dispatch(receivePosts('signup', response));
+      },
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }
+    });
   };
 }
 
@@ -33,7 +76,7 @@ export function fetchPosts(page, sort = '') {
       },
       success: function(response) {
         NProgress.done();
-        dispatch(receivePosts(response));
+        dispatch(receivePosts('fetch', response));
       },
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
