@@ -14,18 +14,15 @@ class Help extends React.Component {
   render() {
     return (
         <div className="container">
-          <h1>Hello, world!</h1>
-          <p>...</p>
-          <p><a className="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-          </p>
+          <h1>How to create a coaster video</h1>
         </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { postsByApi } = state;
-  const { meta, isFetching } = postsByApi.data || {
+  const { signupApi } = state;
+  const { meta, isFetching } = signupApi.data || {
     meta: {},
     isFetching: false
   };

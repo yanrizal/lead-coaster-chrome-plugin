@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Navbar from '../components/Navbar';
 import { routerActions } from 'react-router-redux';
-// import { fetchPosts, selectedFilter } from '../actions/actions';
+import { isLogin } from '../actions/actions';
 // import $ from 'jquery';
 
 
@@ -12,6 +12,11 @@ class CoasterApp extends React.Component {
     super(props);
   }
 
+  componentDidMount(){
+    const { dispatch } = this.props;
+    dispatch(isLogin());
+  }
+
   handleNavClick = e => {
     console.log(e);
     const { dispatch } = this.props;
@@ -19,9 +24,10 @@ class CoasterApp extends React.Component {
   }
 
   render() {
+    const { isLog } = this.props;
     return (
       <div>
-        <Navbar onLearnClick={this.handleNavClick} />
+        <Navbar isLogin={isLog} onLearnClick={this.handleNavClick} />
         {this.props.children}
       </div>
     );
@@ -29,14 +35,15 @@ class CoasterApp extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { postsByApi } = state;
-  const { meta, isFetching } = postsByApi.data || {
+  const { signupApi, isLog } = state;
+  const { meta, isFetching } = signupApi.data || {
     meta: {},
     isFetching: false
   };
   return {
     meta,
-    isFetching
+    isFetching,
+    isLog
   };
 }
 
