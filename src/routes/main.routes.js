@@ -79,16 +79,33 @@ import passport from 'passport';
 module.exports = function(app, passport) {
 
     app.get('/', function(req, res) {
-      let user = (req.user === true ? "true" : "false");
+      let user = (req.user ? true : false);
       res.render('index', { title: 'index', user: user });
     });
 
     app.get('/login', function(req, res) {
-      res.render('index', { title: 'login' });
+      let user = (req.user ? true : false);
+      res.render('index', { title: 'login', user: user });
+    });
+
+    // process the login form
+    app.post('/login', function(req, res, next) {
+      passport.authenticate('local-login', function(err, user, info) { 
+        console.log(err);
+        console.log(info);
+        console.log(user);
+        if (err) { return next(err); }
+        if (!user) { return res.redirect('/login'); }
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            return res.json({detail: info});
+        });
+      })(req, res, next);
     });
 
     app.get('/signup', function(req, res) {
-      res.render('index', { title: 'signup' });
+      let user = (req.user ? true : false);
+      res.render('index', { title: 'signup', user: user });
     });
 
     app.post('/signup', function(req, res, next) {
@@ -97,7 +114,7 @@ module.exports = function(app, passport) {
         console.log(info);
         console.log(user);
         if (err) { return next(err); }
-        if (!user) { return res.redirect('/help'); }
+        if (!user) { return res.redirect('/login'); }
         req.logIn(user, function(err) {
             if (err) { return next(err); }
             return res.json({detail: info});
@@ -106,7 +123,9 @@ module.exports = function(app, passport) {
     });
 
     app.get('/help', isLoggedIn, function(req, res) {
-        res.render('index', { title: 'Help' });
+      console.log(req.user);
+        let user = (req.user ? true : false);
+        res.render('index', { title: 'Help', user: user });
     });
 
     app.get('/logout', function(req, res) {

@@ -25,12 +25,12 @@ class Signup extends React.Component {
     return (
         <div className="container">
           <form className="form-signin">
-            <h2>Sign Up</h2>
+            <h2 className="title">CREATE ACCOUNT</h2>
             <label className="sr-only">Email</label>
             <input type="email" className="form-control" placeholder="Email" name="email" id="inputEmail" />
             <label className="sr-only">Password</label>
             <input type="password" className="form-control" placeholder="Password" name="password" id="inputPassword" />
-            <button onClick={this.handleSubmit} className="btn btn-lg btn-primary btn-block">Continue</button>
+            <button onClick={this.handleSubmit} className="btn btn-lg btn-primary btn-block get-start">Continue</button>
           </form>
         </div>
     );

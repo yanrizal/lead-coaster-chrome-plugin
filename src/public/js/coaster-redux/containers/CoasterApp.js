@@ -24,9 +24,10 @@ class CoasterApp extends React.Component {
   }
 
   render() {
+    const { isLog } = this.props;
     return (
       <div>
-        <Navbar isLogin={false} onLearnClick={this.handleNavClick} />
+        <Navbar isLogin={isLog} onLearnClick={this.handleNavClick} />
         {this.props.children}
       </div>
     );
@@ -34,14 +35,15 @@ class CoasterApp extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { signupApi, isLogin } = state;
+  const { signupApi, isLog } = state;
   const { meta, isFetching } = signupApi.data || {
     meta: {},
     isFetching: false
   };
   return {
     meta,
-    isFetching
+    isFetching,
+    isLog
   };
 }
 

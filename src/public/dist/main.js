@@ -2142,6 +2142,7 @@
 	exports.IS_LOGIN = exports.RECEIVE_POSTS = exports.REQUEST_POSTS = undefined;
 	exports.isLogin = isLogin;
 	exports.signupPost = signupPost;
+	exports.loginPost = loginPost;
 	exports.fetchPosts = fetchPosts;
 	
 	var _jquery = __webpack_require__(32);
@@ -2208,7 +2209,33 @@
 	        dispatch(receivePosts('signup', response));
 	      },
 	      error: function error(xhr, status, err) {
-	        console.error(this.props.url, status, err.toString());
+	        console.error(xhr);
+	      }
+	    });
+	  };
+	}
+	
+	function loginPost(email, password) {
+	  return function (dispatch) {
+	    _nprogressNpm2.default.start();
+	    dispatch(requestPosts());
+	    return _jquery2.default.ajax({
+	      url: '/login',
+	      dataType: 'json',
+	      cache: false,
+	      type: 'post',
+	      data: {
+	        email: email,
+	        password: password
+	      },
+	      success: function success(response) {
+	        console.log(response);
+	        _nprogressNpm2.default.done();
+	        window.location.href = '/help';
+	        dispatch(receivePosts('login', response));
+	      },
+	      error: function error(xhr, status, err) {
+	        console.error(xhr);
 	      }
 	    });
 	  };
@@ -2230,10 +2257,11 @@
 	      },
 	      success: function success(response) {
 	        _nprogressNpm2.default.done();
+	        window.location.href = '/help';
 	        dispatch(receivePosts('fetch', response));
 	      },
 	      error: function error(xhr, status, err) {
-	        console.error(this.props.url, status, err.toString());
+	        console.error(xhr);
 	      }
 	    });
 	  };
@@ -8714,10 +8742,12 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var isLog = this.props.isLog;
+	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_Navbar2.default, { isLogin: false, onLearnClick: this.handleNavClick }),
+	        _react2.default.createElement(_Navbar2.default, { isLogin: isLog, onLearnClick: this.handleNavClick }),
 	        this.props.children
 	      );
 	    }
@@ -8728,7 +8758,7 @@
 	
 	function mapStateToProps(state) {
 	  var signupApi = state.signupApi;
-	  var isLogin = state.isLogin;
+	  var isLog = state.isLog;
 	
 	  var _ref = signupApi.data || {
 	    meta: {},
@@ -8740,7 +8770,8 @@
 	
 	  return {
 	    meta: meta,
-	    isFetching: isFetching
+	    isFetching: isFetching,
+	    isLog: isLog
 	  };
 	}
 	
@@ -8812,7 +8843,7 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'navbar-header' },
-	            isLogin && _react2.default.createElement(
+	            isLogin === 'true' && _react2.default.createElement(
 	              'ul',
 	              { className: 'nav navbar-nav' },
 	              _react2.default.createElement(
@@ -8864,21 +8895,20 @@
 	                  { href: '#' },
 	                  'Account'
 	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  'a',
-	                  { href: '#' },
-	                  'Login'
-	                )
 	              )
-	            ),
+	            )
+	          ),
+	          isLogin === 'true' && _react2.default.createElement(
+	            'ul',
+	            { className: 'nav navbar-nav pull-right' },
 	            _react2.default.createElement(
-	              'a',
-	              { className: 'pull-right', href: '/logout' },
-	              'Logout'
+	              'li',
+	              null,
+	              _react2.default.createElement(
+	                'a',
+	                { href: '/logout' },
+	                'Logout'
+	              )
 	            )
 	          )
 	        )
@@ -9109,6 +9139,8 @@
 	
 	var _reactRedux = __webpack_require__(5);
 	
+	var _actions = __webpack_require__(31);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9116,9 +9148,9 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
 	// import { routeActions } from 'react-router-redux';
-	// import { fetchPosts, selectedFilter } from '../actions/actions';
+	
+	
 	// import $ from 'jquery';
 	
 	var Login = function (_React$Component) {
@@ -9127,7 +9159,19 @@
 	  function Login(props) {
 	    _classCallCheck(this, Login);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Login).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Login).call(this, props));
+	
+	    _this.handleSubmit = function (e) {
+	      var dispatch = _this.props.dispatch;
+	
+	      e.preventDefault();
+	      var email = document.getElementById('logEmail').value;
+	      var password = document.getElementById('logPassword').value;
+	      console.log(email, password);
+	      dispatch((0, _actions.loginPost)(email, password));
+	    };
+	
+	    return _this;
 	  }
 	
 	  _createClass(Login, [{
@@ -9140,35 +9184,20 @@
 	          'form',
 	          { className: 'form-signin' },
 	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'Login'
-	          ),
-	          _react2.default.createElement(
 	            'label',
 	            { className: 'sr-only' },
-	            'Username'
+	            'Email'
 	          ),
-	          _react2.default.createElement('input', { type: 'email', className: 'form-control', placeholder: 'Username', required: '', autofocus: '' }),
+	          _react2.default.createElement('input', { id: 'logEmail', type: 'email', className: 'form-control', placeholder: 'Email', name: 'email' }),
 	          _react2.default.createElement(
 	            'label',
 	            { className: 'sr-only' },
 	            'Password'
 	          ),
-	          _react2.default.createElement('input', { type: 'password', className: 'form-control', placeholder: 'Password', required: '' }),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'checkbox' },
-	            _react2.default.createElement(
-	              'label',
-	              null,
-	              _react2.default.createElement('input', { type: 'checkbox', value: 'remember-me' }),
-	              ' Remember me'
-	            )
-	          ),
+	          _react2.default.createElement('input', { id: 'logPassword', type: 'password', className: 'form-control', placeholder: 'Password', name: 'password' }),
 	          _react2.default.createElement(
 	            'button',
-	            { className: 'btn btn-lg btn-primary btn-block', type: 'submit' },
+	            { className: 'btn btn-lg btn-primary btn-block get-start', onClick: this.handleSubmit },
 	            'Get Started'
 	          )
 	        )
@@ -9263,8 +9292,8 @@
 	          { className: 'form-signin' },
 	          _react2.default.createElement(
 	            'h2',
-	            null,
-	            'Sign Up'
+	            { className: 'title' },
+	            'CREATE ACCOUNT'
 	          ),
 	          _react2.default.createElement(
 	            'label',
@@ -9280,7 +9309,7 @@
 	          _react2.default.createElement('input', { type: 'password', className: 'form-control', placeholder: 'Password', name: 'password', id: 'inputPassword' }),
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: this.handleSubmit, className: 'btn btn-lg btn-primary btn-block' },
+	            { onClick: this.handleSubmit, className: 'btn btn-lg btn-primary btn-block get-start' },
 	            'Continue'
 	          )
 	        )

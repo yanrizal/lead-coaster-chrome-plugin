@@ -56,7 +56,33 @@ export function signupPost(email, password) {
         dispatch(receivePosts('signup', response));
       },
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(xhr);
+      }
+    });
+  };
+}
+
+export function loginPost(email, password) {
+  return dispatch => {
+    NProgress.start();
+    dispatch(requestPosts());
+    return $.ajax({
+      url: '/login',
+      dataType: 'json',
+      cache: false,
+      type: 'post',
+      data: {
+        email: email,
+        password: password
+      },
+      success: function(response) {
+        console.log(response);
+        NProgress.done();
+        window.location.href = '/help';
+        dispatch(receivePosts('login', response));
+      },
+      error: function(xhr, status, err) {
+        console.error(xhr);
       }
     });
   };
@@ -76,10 +102,11 @@ export function fetchPosts(page, sort = '') {
       },
       success: function(response) {
         NProgress.done();
+        window.location.href = '/help';
         dispatch(receivePosts('fetch', response));
       },
       error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
+        console.error(xhr);
       }
     });
   };
