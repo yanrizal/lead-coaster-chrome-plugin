@@ -9139,6 +9139,8 @@
 	
 	var _reactRedux = __webpack_require__(5);
 	
+	var _reactRouterRedux = __webpack_require__(35);
+	
 	var _actions = __webpack_require__(31);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -9148,8 +9150,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// import { routeActions } from 'react-router-redux';
-	
 	
 	// import $ from 'jquery';
 	
@@ -9169,6 +9169,13 @@
 	      var password = document.getElementById('logPassword').value;
 	      console.log(email, password);
 	      dispatch((0, _actions.loginPost)(email, password));
+	    };
+	
+	    _this.signupPage = function (e) {
+	      var dispatch = _this.props.dispatch;
+	
+	      e.preventDefault();
+	      dispatch(_reactRouterRedux.routerActions.push('/signup'));
 	    };
 	
 	    return _this;
@@ -9199,6 +9206,20 @@
 	            'button',
 	            { className: 'btn btn-lg btn-primary btn-block get-start', onClick: this.handleSubmit },
 	            'Get Started'
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'pull-left' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: '', className: 'crt-acc', onClick: this.signupPage },
+	              'Create Account'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'crt-acc pull-right' },
+	            'Need Help?'
 	          )
 	        )
 	      );
@@ -9288,13 +9309,13 @@
 	        'div',
 	        { className: 'container' },
 	        _react2.default.createElement(
+	          'h2',
+	          { className: 'title' },
+	          'CREATE ACCOUNT'
+	        ),
+	        _react2.default.createElement(
 	          'form',
 	          { className: 'form-signin' },
-	          _react2.default.createElement(
-	            'h2',
-	            { className: 'title' },
-	            'CREATE ACCOUNT'
-	          ),
 	          _react2.default.createElement(
 	            'label',
 	            { className: 'sr-only' },
@@ -9311,6 +9332,11 @@
 	            'button',
 	            { onClick: this.handleSubmit, className: 'btn btn-lg btn-primary btn-block get-start' },
 	            'Continue'
+	          ),
+	          _react2.default.createElement(
+	            'label',
+	            { className: 'crt-acc', style: { textAlign: 'center' } },
+	            'Terms & Conditions'
 	          )
 	        )
 	      );
