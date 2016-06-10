@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import { routeActions } from 'react-router-redux';
+import { routerActions } from 'react-router-redux';
 import { loginPost } from '../actions/actions';
 // import $ from 'jquery';
 
@@ -20,6 +20,12 @@ class Login extends React.Component {
     dispatch(loginPost(email,password));
   }
 
+  signupPage = e => {
+    const { dispatch } = this.props;
+    e.preventDefault();
+    dispatch(routerActions.push('/signup'));
+  }
+
   render() {
     return (
         <div className="container">
@@ -29,7 +35,10 @@ class Login extends React.Component {
             <label className="sr-only">Password</label>
             <input id="logPassword" type="password" className="form-control" placeholder="Password" name="password" />
             <button className="btn btn-lg btn-primary btn-block get-start" onClick={this.handleSubmit}>Get Started</button>
+            <label className="pull-left"><a href="" className="crt-acc" onClick={this.signupPage}>Create Account</a></label>
+            <label className="crt-acc pull-right">Need Help?</label>
           </form>
+
         </div>
     );
   }

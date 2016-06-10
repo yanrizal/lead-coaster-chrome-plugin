@@ -24,13 +24,14 @@ class Signup extends React.Component {
   render() {
     return (
         <div className="container">
+          <h2 className="title">CREATE ACCOUNT</h2>
           <form className="form-signin">
-            <h2 className="title">CREATE ACCOUNT</h2>
             <label className="sr-only">Email</label>
             <input type="email" className="form-control" placeholder="Email" name="email" id="inputEmail" />
             <label className="sr-only">Password</label>
             <input type="password" className="form-control" placeholder="Password" name="password" id="inputPassword" />
             <button onClick={this.handleSubmit} className="btn btn-lg btn-primary btn-block get-start">Continue</button>
+            <label className="crt-acc" style={{textAlign:'center'}}>Terms & Conditions</label>
           </form>
         </div>
     );
