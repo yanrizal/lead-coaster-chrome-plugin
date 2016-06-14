@@ -8,6 +8,7 @@ import Home from './Home';
 import Login from './Login';
 import Signup from './Signup';
 import Help from './Help';
+import Coaster from './Coaster';
 
 const store = configureStore();
 
@@ -21,6 +22,7 @@ class Root extends React.Component {
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
             <Route path="/help" component={Help} />
+            <Route path="/coaster/:active" component={Coaster}/>
           </Route>
         </Router>
       </Provider>

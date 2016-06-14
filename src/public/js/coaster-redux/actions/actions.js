@@ -88,21 +88,20 @@ export function loginPost(email, password) {
   };
 }
 
-export function fetchPosts(page, sort = '') {
+export function fetchPosts(email) {
   return dispatch => {
     NProgress.start();
     dispatch(requestPosts());
     return $.ajax({
-      url: '',
+      url: '/coaster/api',
       dataType: 'json',
       cache: false,
       type: 'post',
       data: {
-        total_page: 10,
+        email: email,
       },
       success: function(response) {
         NProgress.done();
-        window.location.href = '/help';
         dispatch(receivePosts('fetch', response));
       },
       error: function(xhr, status, err) {

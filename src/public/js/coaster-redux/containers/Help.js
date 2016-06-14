@@ -13,9 +13,11 @@ class Help extends React.Component {
 
   render() {
     return (
+      <div className="dashboard">
         <div className="container">
           <h1>How to create a coaster video</h1>
         </div>
+      </div>
     );
   }
 }

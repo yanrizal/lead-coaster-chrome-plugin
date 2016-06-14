@@ -19,7 +19,7 @@ class Navbar extends React.Component{
               <div className="container">
                 <div className="navbar-header">
                   {isLogin === 'true' &&<ul className="nav navbar-nav">
-                    <li className="active"><a href="#">Coasters <span className="sr-only">(current)</span></a></li>
+                    <li><a data-page='coaster/active' onClick={this.handleNavClick}>Coaster</a></li>
                     <li><a data-page='result' onClick={this.handleNavClick} >Results</a></li>
                     <li><a data-page='help' onClick={this.handleNavClick} >Help</a></li>
                     <li><a href="#">Invite</a></li>

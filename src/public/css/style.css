@@ -1,3 +1,13 @@
+body {
+  padding-top: 40px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eb6235+0,722f1a+69,110704+100 */
+  background: #eb6235; /* Old browsers */
+  background: -moz-linear-gradient(top,  #eb6235 0%, #722f1a 69%, #110704 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #eb6235 0%,#722f1a 69%,#110704 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #eb6235 0%,#722f1a 69%,#110704 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eb6235', endColorstr='#110704',GradientType=0 ); /* IE6-9 */
+}
+
 table{
 	background: #FFF;
 	margin-top: 60px;
@@ -22,6 +32,15 @@ table{
   font-family: arial;
 }
 
+.navbar-default .navbar-nav>li>a {
+    color: #FFF;
+}
+
+.dashboard{
+  background: #FFF;
+  height: 100%;
+}
+
 #loginbg{
   position: absolute;
   height: 100%;
@@ -39,16 +58,6 @@ table{
 }
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
    color: #FFF !important;
-}
-body {
-  padding-top: 40px;
-  padding-bottom: 40px;
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#eb6235+0,722f1a+69,110704+100 */
-  background: #eb6235; /* Old browsers */
-  background: -moz-linear-gradient(top,  #eb6235 0%, #722f1a 69%, #110704 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #eb6235 0%,#722f1a 69%,#110704 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #eb6235 0%,#722f1a 69%,#110704 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eb6235', endColorstr='#110704',GradientType=0 ); /* IE6-9 */
 }
 
 .form-signin {

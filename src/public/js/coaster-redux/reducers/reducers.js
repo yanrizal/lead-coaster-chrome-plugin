@@ -7,12 +7,7 @@ function posts(state = {
   isFetching: false,
   didInvalidate: false,
   items: [],
-  status: false,
-  meta: {
-    total_rec: 0
-  },
-  total: 0,
-  totalItem: 0 }, action) {
+  status: false}, action) {
   switch (action.type) {
     case REQUEST_POSTS:
       return Object.assign({}, state, {
@@ -31,6 +26,7 @@ function posts(state = {
         isFetching: false,
         didInvalidate: false,
         meta: meta,
+        items:items,
         status: action.status,
         lastUpdated: action.receivedAt,
       });
@@ -105,6 +101,7 @@ function isLog(state = {}, action){
 const rootReducer = combineReducers({
   signupApi,
   isLog,
+  postsByApi,
   routing: routeReducer,
   // selectedSearchType,
   // routing: routeReducer,

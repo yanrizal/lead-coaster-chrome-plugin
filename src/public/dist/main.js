@@ -128,6 +128,10 @@
 	
 	var _Help2 = _interopRequireDefault(_Help);
 	
+	var _Coaster = __webpack_require__(105);
+	
+	var _Coaster2 = _interopRequireDefault(_Coaster);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -162,7 +166,8 @@
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Login2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _Login2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _Signup2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: '/help', component: _Help2.default })
+	            _react2.default.createElement(_reactRouter.Route, { path: '/help', component: _Help2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/coaster/:active', component: _Coaster2.default })
 	          )
 	        )
 	      );
@@ -2241,23 +2246,20 @@
 	  };
 	}
 	
-	function fetchPosts(page) {
-	  var sort = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
-	
+	function fetchPosts(email) {
 	  return function (dispatch) {
 	    _nprogressNpm2.default.start();
 	    dispatch(requestPosts());
 	    return _jquery2.default.ajax({
-	      url: '',
+	      url: '/coaster/api',
 	      dataType: 'json',
 	      cache: false,
 	      type: 'post',
 	      data: {
-	        total_page: 10
+	        email: email
 	      },
 	      success: function success(response) {
 	        _nprogressNpm2.default.done();
-	        window.location.href = '/help';
 	        dispatch(receivePosts('fetch', response));
 	      },
 	      error: function error(xhr, status, err) {
@@ -2799,12 +2801,7 @@
 	    isFetching: false,
 	    didInvalidate: false,
 	    items: [],
-	    status: false,
-	    meta: {
-	      total_rec: 0
-	    },
-	    total: 0,
-	    totalItem: 0 } : arguments[0];
+	    status: false } : arguments[0];
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -2824,6 +2821,7 @@
 	        isFetching: false,
 	        didInvalidate: false,
 	        meta: meta,
+	        items: items,
 	        status: action.status,
 	        lastUpdated: action.receivedAt
 	      });
@@ -2909,6 +2907,7 @@
 	var rootReducer = (0, _redux.combineReducers)({
 	  signupApi: signupApi,
 	  isLog: isLog,
+	  postsByApi: postsByApi,
 	  routing: _reactRouterRedux.routeReducer
 	});
 	
@@ -8848,16 +8847,11 @@
 	              { className: 'nav navbar-nav' },
 	              _react2.default.createElement(
 	                'li',
-	                { className: 'active' },
+	                null,
 	                _react2.default.createElement(
 	                  'a',
-	                  { href: '#' },
-	                  'Coasters ',
-	                  _react2.default.createElement(
-	                    'span',
-	                    { className: 'sr-only' },
-	                    '(current)'
-	                  )
+	                  { 'data-page': 'coaster/active', onClick: this.handleNavClick },
+	                  'Coaster'
 	                )
 	              ),
 	              _react2.default.createElement(
@@ -9409,11 +9403,15 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'container' },
+	        { className: 'dashboard' },
 	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'How to create a coaster video'
+	          'div',
+	          { className: 'container' },
+	          _react2.default.createElement(
+	            'h1',
+	            null,
+	            'How to create a coaster video'
+	          )
 	        )
 	      );
 	    }
@@ -9440,6 +9438,257 @@
 	}
 	
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Help);
+
+/***/ },
+/* 105 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(5);
+	
+	var _actions = __webpack_require__(31);
+	
+	var _TableCoaster = __webpack_require__(106);
+	
+	var _TableCoaster2 = _interopRequireDefault(_TableCoaster);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// import { routeActions } from 'react-router-redux';
+	
+	
+	// import $ from 'jquery';
+	
+	var Coaster = function (_React$Component) {
+	  _inherits(Coaster, _React$Component);
+	
+	  function Coaster(props) {
+	    _classCallCheck(this, Coaster);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Coaster).call(this, props));
+	  }
+	
+	  _createClass(Coaster, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var dispatch = this.props.dispatch;
+	
+	      var email = 'yanuar.rizal@mbiz.co.id';
+	      dispatch((0, _actions.fetchPosts)(email));
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var items = _props.items;
+	      var isFetching = _props.isFetching;
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'dashboard' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container' },
+	          _react2.default.createElement(
+	            'h1',
+	            null,
+	            'Coaster'
+	          ),
+	          !isFetching && _react2.default.createElement(_TableCoaster2.default, { items: items })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Coaster;
+	}(_react2.default.Component);
+	
+	function mapStateToProps(state) {
+	  var signupApi = state.signupApi;
+	  var postsByApi = state.postsByApi;
+	
+	  var _ref = postsByApi.data || {
+	    meta: {},
+	    isFetching: false,
+	    items: []
+	  };
+	
+	  var meta = _ref.meta;
+	  var isFetching = _ref.isFetching;
+	  var items = _ref.items;
+	
+	  return {
+	    meta: meta,
+	    isFetching: isFetching,
+	    items: items
+	  };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Coaster);
+
+/***/ },
+/* 106 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _jquery = __webpack_require__(32);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TableCoaster = function (_React$Component) {
+	  _inherits(TableCoaster, _React$Component);
+	
+	  function TableCoaster() {
+	    _classCallCheck(this, TableCoaster);
+	
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TableCoaster).apply(this, arguments));
+	  }
+	
+	  _createClass(TableCoaster, [{
+	    key: 'render',
+	    value: function render() {
+	      var items = this.props.items;
+	
+	      var listNode = items.map(function (items, idx) {
+	        return _react2.default.createElement(
+	          'tr',
+	          { key: idx },
+	          _react2.default.createElement(
+	            'th',
+	            { scope: 'row' },
+	            'Yanuar'
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            { style: { width: '100px' } },
+	            _react2.default.createElement(
+	              'a',
+	              { href: '' },
+	              items.urlSearch
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            items.profileVisit.length
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            items.totalSearch
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            '100 Leads'
+	          ),
+	          _react2.default.createElement('td', null),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            _react2.default.createElement(
+	              'button',
+	              null,
+	              'View Result'
+	            )
+	          )
+	        );
+	      });
+	
+	      return _react2.default.createElement(
+	        'table',
+	        { className: 'table' },
+	        _react2.default.createElement(
+	          'thead',
+	          null,
+	          _react2.default.createElement(
+	            'tr',
+	            null,
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Coaster Name'
+	            ),
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Search Link'
+	            ),
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Profile Visits'
+	            ),
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Total In Search'
+	            ),
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Leads'
+	            ),
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Pause/Delete'
+	            ),
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Results'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'tbody',
+	          null,
+	          listNode
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return TableCoaster;
+	}(_react2.default.Component);
+	
+	exports.default = TableCoaster;
 
 /***/ }
 /******/ ]);
