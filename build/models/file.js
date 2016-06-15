@@ -24,6 +24,17 @@ var fileSchema = new _mongoose2['default'].Schema({
 
 var File = _mongoose2['default'].model('File', fileSchema, 'file');
 
+var findFile = function findFile(params, cb) {
+  console.log(params.username);
+  File.findOne({ 'data.username': params.username }, function (err, file) {
+    console.log(file);
+    if (err) return cb(err);
+    cb(null, file);
+    return true;
+  });
+};
+
+exports.findFile = findFile;
 var saveFile = function saveFile(params, cb) {
   var result = {};
   console.log(params.data[0].username);

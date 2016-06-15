@@ -91,6 +91,16 @@ module.exports = function (app, passport) {
     });
   });
 
+  app.post('/getdata', jsonParser, function (req, res) {
+    var params = {
+      username: req.body.lkdUsername
+    };
+    (0, _modelsFile.findFile)(params, function (err, response) {
+      console.log(response);
+      res.json(response);
+    });
+  });
+
   app.get('/login', function (req, res) {
     var user = req.user ? true : false;
     res.render('index', { title: 'login', user: user });

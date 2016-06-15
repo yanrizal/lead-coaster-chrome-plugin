@@ -14,6 +14,16 @@ const fileSchema = new mongoose.Schema({
 
 const File = mongoose.model('File', fileSchema, 'file');
 
+export const findFile = (params, cb) => {
+  console.log(params.username);
+  File.findOne({ 'data.username': params.username }, (err, file) => {
+    console.log(file);
+    if (err) return cb(err);
+    cb(null, file);
+    return true;
+  });
+};
+
 export const saveFile = (params, cb) => {
   let result = {};
   console.log(params.data[0].username);

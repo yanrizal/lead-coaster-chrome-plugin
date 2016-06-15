@@ -123,9 +123,6 @@ casper.thenOpen("http://localhost:3000/savedata", {
           "totalSearch": totalSearch,
           "dataProfile": dataProfile,
           "page": page
-      },
-      headers: {
-          'Content-type': 'multipart/form-data'
       }
 });
 
