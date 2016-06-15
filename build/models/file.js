@@ -11,57 +11,24 @@ var _mongoose = require('mongoose');
 var _mongoose2 = _interopRequireDefault(_mongoose);
 
 var fileSchema = new _mongoose2['default'].Schema({
-  fileId: { type: String },
-  name: { type: String },
-  status: { type: Number },
-  userId: { type: String }
+  data: [{
+    username: { type: String },
+    urlSearch: { type: String },
+    totalSearch: { type: String },
+    profileVisit: { type: Array }
+  }],
+  meta: {
+    lastPage: { type: Number }
+  }
 });
 
 var File = _mongoose2['default'].model('File', fileSchema, 'file');
 
-var findUserFile = function findUserFile(params, cb) {
-  File.find(params, function (err, file) {
-    if (err) return cb(err);
-    cb(null, file);
-    return true;
-  });
-};
-
-exports.findUserFile = findUserFile;
-var deleteFile = function deleteFile(params, cb) {
-  File.find(params).remove(function (err, response) {
-    console.log(response);
-    var result = {
-      successfully_deleted: false
-    };
-    if (err) return cb(null, result);
-    result.successfully_deleted = true;
-    cb(null, result);
-    return true;
-  });
-};
-
-exports.deleteFile = deleteFile;
-var updateFile = function updateFile(params, cb) {
-  File.findOne({ fileId: params.fileId }, function (error, file) {
-    file.status = params.status;
-    file.save(function (err, response) {
-      console.log(response);
-      var result = {
-        successfully_updated: false
-      };
-      if (err) return cb(null, result);
-      result.successfully_updated = true;
-      cb(null, result);
-      return true;
-    });
-  });
-};
-
-exports.updateFile = updateFile;
 var saveFile = function saveFile(params, cb) {
   var result = {};
-  File.findOne({ fileId: params.fileId }, function (error, file) {
+  console.log(params.data[0].username);
+  File.findOne({ 'data.username': params.data[0].username }, function (error, file) {
+    console.log(file);
     if (file === null) {
       var newFile = new File(params);
       newFile.save(function (err, response) {
@@ -75,11 +42,18 @@ var saveFile = function saveFile(params, cb) {
         return true;
       });
     } else {
-      result = {
-        file_already_exist: true
-      };
-      cb(null, result);
-      return true;
+      file.data[0] = params.data[0];
+      file.meta.lastPage = params.meta.lastPage;
+      file.save(function (err, response) {
+        console.log(response);
+        var result = {
+          successfully_updated: false
+        };
+        if (err) return cb(null, result);
+        result.successfully_updated = true;
+        cb(null, result);
+        return true;
+      });
     }
   });
 };

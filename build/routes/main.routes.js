@@ -38,6 +38,8 @@ var _passport = require('passport');
 
 var _passport2 = _interopRequireDefault(_passport);
 
+var _modelsFile = require('../models/file');
+
 // const clientID = '759dlh2okqws42';
 // const clientSecret = 'OnnN8xW3X5zecdei';
 // const proxy = 'http://101.96.10.30:84';
@@ -69,6 +71,24 @@ module.exports = function (app, passport) {
       }
     });
     res.json(params.url);
+  });
+
+  app.post('/savedata', jsonParser, function (req, res) {
+    var params = {
+      data: [{
+        username: req.body.lkdUsername,
+        urlSearch: req.body.urlSearch,
+        totalSearch: req.body.totalSearch,
+        profileVisit: req.body.dataProfile
+      }],
+      meta: {
+        lastPage: req.body.page
+      }
+    };
+    (0, _modelsFile.saveFile)(params, function (err, response) {
+      console.log(response);
+      res.json(response);
+    });
   });
 
   app.get('/login', function (req, res) {

@@ -22,13 +22,29 @@ var casper = require('casper').create({
 //PROFILE DATA
 var lkdUsername = 'yanuar.rizal@mbiz.co.id';
 var lkdPassword = '@FYhdv9Y';
-var urlSearch = 'https://www.linkedin.com/vsearch/p?type=people&keywords=yanuar';
 var totalSearch = 0;
+
+//LOAD DATA
+var jsonData,dataProfile;
+var pathData = 'tmp/data-'+lkdUsername+'.json';
+if (!fs.exists(pathData)){
+  jsonData = {};
+  //require('utils').dump(jsonData);
+  dataProfile = [];
+}else{
+  jsonData = require(pathData);
+  require('utils').dump(jsonData);
+  dataProfile = jsonData.data[0].profileVisit;
+  console.log('length data', dataProfile.length)
+}
+
 
 // GLOBAL VARIABLE
 var links;
-var dataProfile = [];
 var i = -1;
+var page = Math.floor(dataProfile.length/10)+1;
+console.log('page', page);
+var urlSearch = 'https://www.linkedin.com/vsearch/p?type=people&keywords=yanuar&page_num='+page;
 
 function getLinks() {
     var allLinks = document.querySelectorAll('.main-headline');
@@ -43,8 +59,6 @@ function getRandomArbitrary(min, max) {
 
 var url = 'https://www.linkedin.com/';
 casper.start(url, function() {
-   // console.log("page loaded");
-   console.log(searchChrome.url);
 	this.waitForSelector('form.login-form', function(){
 		 console.log('form loaded')
 		 this.fillSelectors('form.login-form', {
@@ -85,31 +99,51 @@ casper.thenOpen(urlSearch, function() {
               };
             });
             console.log(data.idUrl, data.fullName);
-            // for(var i=0;i<dataProfile.length;i++){
-            //     if(dataProfile[i].idUrl !== data.idUrl){
-                  
-            //     }
-            // }
-            dataProfile.push(data); 
+            var flag = true;
+            for(var i=0;i<dataProfile.length;i++){
+                if(dataProfile[i].idUrl === data.idUrl){
+                  flag = false;
+                  break;
+                }else{
+                  flag = true;
+                }
+            }
+            if(flag){
+              dataProfile.push(data); 
+            }
         }).wait(getRandomArbitrary(5000,30000));
     });
 });
 
+casper.thenOpen("http://localhost:3000/savedata", {
+      method: 'post',
+      data:{
+          "lkdUsername": lkdUsername,
+          "urlSearch": urlSearch,
+          "totalSearch": totalSearch,
+          "dataProfile": dataProfile,
+          "page": page
+      },
+      headers: {
+          'Content-type': 'multipart/form-data'
+      }
+});
+
 casper.then(function(){
-  console.log('write data');
-  var jsonStr = {
-    data:[{
-      username: lkdUsername,
-      urlSearch: urlSearch,
-      totalSearch: totalSearch,
-      profileVisit: dataProfile
-    }],
-    meta:{
-      page: 1
-    }
-  };
-  var myfile = 'tmp/data-'+lkdUsername+'.json';
-  fs.write(myfile, JSON.stringify(jsonStr), 'w');
+  console.log('saved');
+  // var jsonStr = {
+  //   data:[{
+  //     username: lkdUsername,
+  //     urlSearch: urlSearch,
+  //     totalSearch: totalSearch,
+  //     profileVisit: dataProfile
+  //   }],
+  //   meta:{
+  //     page: 1
+  //   }
+  // };
+  // var myfile = 'tmp/data-'+lkdUsername+'.json';
+  // fs.write(myfile, JSON.stringify(jsonStr), 'w');
 });
 
 

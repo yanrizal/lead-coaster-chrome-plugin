@@ -3,6 +3,12 @@ import $ from 'jquery'
 
 class TableCoaster extends React.Component{
 
+  startBot = () => {
+    this.props.onStartClick({
+      'start':true
+    });
+  }
+
 	render(){
       const { items } = this.props;
       const listNode = items.map((items,idx) => { 
@@ -10,10 +16,10 @@ class TableCoaster extends React.Component{
           <tr key={idx}> 
             <th scope="row">Yanuar</th> 
             <td style={{width:'100px'}}><a href="">{items.urlSearch}</a></td> 
-            <td>{items.profileVisit.length}</td> 
+            <td>{items.profileVisit.length} views</td> 
             <td>{items.totalSearch}</td> 
-            <td>100 Leads</td>
-            <td></td>
+            <td>0 Leads</td>
+            <td><a onClick={this.startBot}>Start</a></td>
             <td><button>View Result</button></td>
           </tr> 
         )

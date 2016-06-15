@@ -7,6 +7,7 @@ import querystring from 'querystring';
 import fs from 'fs';
 import chalk from 'chalk';
 import passport from 'passport';
+import { saveFile } from '../models/file';
 
 // const clientID = '759dlh2okqws42';
 // const clientSecret = 'OnnN8xW3X5zecdei';
@@ -39,6 +40,24 @@ module.exports = function(app, passport) {
           }
       });
       res.json(params.url);
+    });
+
+    app.post('/savedata', jsonParser, (req, res) => {
+      const params = {
+        data:[{
+          username: req.body.lkdUsername,
+          urlSearch: req.body.urlSearch,
+          totalSearch: req.body.totalSearch,
+          profileVisit: req.body.dataProfile
+        }],
+        meta:{
+          lastPage: req.body.page
+        }
+      };
+      saveFile(params, (err, response) => {
+        console.log(response);
+        res.json(response);
+      });
     });
 
     app.get('/login', function(req, res) {

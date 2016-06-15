@@ -18,13 +18,17 @@ class Coaster extends React.Component {
     dispatch(fetchPosts(email));
   }
 
+  handleStartClick = e => {
+    console.log(e);
+  }
+
   render() {
     const {items, isFetching} = this.props
     return (
       <div className="dashboard">
         <div className="container">
           <h1>Coaster</h1>
-          {!isFetching && <TableCoaster items={items}/>}
+          {!isFetching && <TableCoaster items={items} onStartClick={this.handleStartClick}/>}
         </div>
       </div>
     );

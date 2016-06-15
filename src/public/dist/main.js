@@ -9481,7 +9481,13 @@
 	  function Coaster(props) {
 	    _classCallCheck(this, Coaster);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Coaster).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Coaster).call(this, props));
+	
+	    _this.handleStartClick = function (e) {
+	      console.log(e);
+	    };
+	
+	    return _this;
 	  }
 	
 	  _createClass(Coaster, [{
@@ -9510,7 +9516,7 @@
 	            null,
 	            'Coaster'
 	          ),
-	          !isFetching && _react2.default.createElement(_TableCoaster2.default, { items: items })
+	          !isFetching && _react2.default.createElement(_TableCoaster2.default, { items: items, onStartClick: this.handleStartClick })
 	        )
 	      );
 	    }
@@ -9574,14 +9580,28 @@
 	  _inherits(TableCoaster, _React$Component);
 	
 	  function TableCoaster() {
+	    var _Object$getPrototypeO;
+	
+	    var _temp, _this, _ret;
+	
 	    _classCallCheck(this, TableCoaster);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(TableCoaster).apply(this, arguments));
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(TableCoaster)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.startBot = function () {
+	      _this.props.onStartClick({
+	        'start': true
+	      });
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
 	  _createClass(TableCoaster, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+	
 	      var items = this.props.items;
 	
 	      var listNode = items.map(function (items, idx) {
@@ -9605,7 +9625,8 @@
 	          _react2.default.createElement(
 	            'td',
 	            null,
-	            items.profileVisit.length
+	            items.profileVisit.length,
+	            ' views'
 	          ),
 	          _react2.default.createElement(
 	            'td',
@@ -9615,9 +9636,17 @@
 	          _react2.default.createElement(
 	            'td',
 	            null,
-	            '100 Leads'
+	            '0 Leads'
 	          ),
-	          _react2.default.createElement('td', null),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            _react2.default.createElement(
+	              'a',
+	              { onClick: _this2.startBot },
+	              'Start'
+	            )
+	          ),
 	          _react2.default.createElement(
 	            'td',
 	            null,
