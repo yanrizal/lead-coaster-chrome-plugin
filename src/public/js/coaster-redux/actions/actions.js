@@ -93,16 +93,37 @@ export function fetchPosts(email) {
     NProgress.start();
     dispatch(requestPosts());
     return $.ajax({
-      url: '/coaster/api',
+      url: '/getdata',
       dataType: 'json',
       cache: false,
       type: 'post',
       data: {
-        email: email,
+        lkdUsername: email,
       },
       success: function(response) {
         NProgress.done();
         dispatch(receivePosts('fetch', response));
+      },
+      error: function(xhr, status, err) {
+        console.error(xhr);
+      }
+    });
+  };
+}
+
+export function startBot() {
+  return dispatch => {
+    NProgress.start();
+    dispatch(requestPosts());
+    return $.ajax({
+      url: 'http://cron-leadcoaster/startapi',
+      dataType: 'json',
+      cache: false,
+      type: 'post',
+      success: function(response) {
+        console.log(response);
+        //NProgress.done();
+        //dispatch(receivePosts('fetch', response));
       },
       error: function(xhr, status, err) {
         console.error(xhr);

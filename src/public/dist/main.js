@@ -132,6 +132,10 @@
 	
 	var _Coaster2 = _interopRequireDefault(_Coaster);
 	
+	var _Result = __webpack_require__(107);
+	
+	var _Result2 = _interopRequireDefault(_Result);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -167,7 +171,8 @@
 	            _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _Login2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _Signup2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/help', component: _Help2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: '/coaster/:active', component: _Coaster2.default })
+	            _react2.default.createElement(_reactRouter.Route, { path: '/coaster/:active', component: _Coaster2.default }),
+	            _react2.default.createElement(_reactRouter.Route, { path: '/result', component: _Result2.default })
 	          )
 	        )
 	      );
@@ -2149,6 +2154,7 @@
 	exports.signupPost = signupPost;
 	exports.loginPost = loginPost;
 	exports.fetchPosts = fetchPosts;
+	exports.startBot = startBot;
 	
 	var _jquery = __webpack_require__(32);
 	
@@ -2251,16 +2257,37 @@
 	    _nprogressNpm2.default.start();
 	    dispatch(requestPosts());
 	    return _jquery2.default.ajax({
-	      url: '/coaster/api',
+	      url: '/getdata',
 	      dataType: 'json',
 	      cache: false,
 	      type: 'post',
 	      data: {
-	        email: email
+	        lkdUsername: email
 	      },
 	      success: function success(response) {
 	        _nprogressNpm2.default.done();
 	        dispatch(receivePosts('fetch', response));
+	      },
+	      error: function error(xhr, status, err) {
+	        console.error(xhr);
+	      }
+	    });
+	  };
+	}
+	
+	function startBot() {
+	  return function (dispatch) {
+	    _nprogressNpm2.default.start();
+	    dispatch(requestPosts());
+	    return _jquery2.default.ajax({
+	      url: 'http://cron-leadcoaster/startapi',
+	      dataType: 'json',
+	      cache: false,
+	      type: 'post',
+	      success: function success(response) {
+	        console.log(response);
+	        //NProgress.done();
+	        //dispatch(receivePosts('fetch', response));
 	      },
 	      error: function error(xhr, status, err) {
 	        console.error(xhr);
@@ -9485,6 +9512,9 @@
 	
 	    _this.handleStartClick = function (e) {
 	      console.log(e);
+	      if (e.start) {
+	        dispatch((0, _actions.startBot)());
+	      }
 	    };
 	
 	    return _this;
@@ -9625,7 +9655,7 @@
 	          _react2.default.createElement(
 	            'td',
 	            null,
-	            items.profileVisit.length,
+	            JSON.parse(items.profileVisit).length,
 	            ' views'
 	          ),
 	          _react2.default.createElement(
@@ -9643,7 +9673,7 @@
 	            null,
 	            _react2.default.createElement(
 	              'a',
-	              { onClick: _this2.startBot },
+	              { style: { cursor: 'pointer' }, onClick: _this2.startBot },
 	              'Start'
 	            )
 	          ),
@@ -9718,6 +9748,222 @@
 	}(_react2.default.Component);
 	
 	exports.default = TableCoaster;
+
+/***/ },
+/* 107 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(5);
+	
+	var _actions = __webpack_require__(31);
+	
+	var _ListUser = __webpack_require__(108);
+	
+	var _ListUser2 = _interopRequireDefault(_ListUser);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	// import { routeActions } from 'react-router-redux';
+	
+	
+	// import $ from 'jquery';
+	
+	var Result = function (_React$Component) {
+	  _inherits(Result, _React$Component);
+	
+	  function Result(props) {
+	    _classCallCheck(this, Result);
+	
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Result).call(this, props));
+	
+	    _this.handleStartClick = function (e) {
+	      console.log(e);
+	    };
+	
+	    return _this;
+	  }
+	
+	  _createClass(Result, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var dispatch = this.props.dispatch;
+	
+	      var email = 'yanuar.rizal@mbiz.co.id';
+	      dispatch((0, _actions.fetchPosts)(email));
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var items = _props.items;
+	      var isFetching = _props.isFetching;
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'dashboard' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container' },
+	          _react2.default.createElement(
+	            'h1',
+	            null,
+	            'Result'
+	          ),
+	          !isFetching && _react2.default.createElement(_ListUser2.default, { items: items })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Result;
+	}(_react2.default.Component);
+	
+	function mapStateToProps(state) {
+	  var signupApi = state.signupApi;
+	  var postsByApi = state.postsByApi;
+	
+	  var _ref = postsByApi.data || {
+	    meta: {},
+	    isFetching: false,
+	    items: []
+	  };
+	
+	  var meta = _ref.meta;
+	  var isFetching = _ref.isFetching;
+	  var items = _ref.items;
+	
+	  return {
+	    meta: meta,
+	    isFetching: isFetching,
+	    items: items
+	  };
+	}
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Result);
+
+/***/ },
+/* 108 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _jquery = __webpack_require__(32);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ListUser = function (_React$Component) {
+	  _inherits(ListUser, _React$Component);
+	
+	  function ListUser() {
+	    var _Object$getPrototypeO;
+	
+	    var _temp, _this, _ret;
+	
+	    _classCallCheck(this, ListUser);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(ListUser)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.startBot = function () {
+	      _this.props.onStartClick({
+	        'start': true
+	      });
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+	
+	  _createClass(ListUser, [{
+	    key: 'render',
+	    value: function render() {
+	      var items = this.props.items;
+	
+	      var listNode = items.map(function (items, idx) {
+	        return _react2.default.createElement(
+	          'tr',
+	          { key: idx },
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            JSON.parse(items.profileVisit).length,
+	            ' views'
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            items.totalSearch
+	          )
+	        );
+	      });
+	
+	      return _react2.default.createElement(
+	        'table',
+	        { className: 'table' },
+	        _react2.default.createElement(
+	          'thead',
+	          null,
+	          _react2.default.createElement(
+	            'tr',
+	            null,
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Name'
+	            ),
+	            _react2.default.createElement(
+	              'th',
+	              null,
+	              'Profile Url'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'tbody',
+	          null,
+	          listNode
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return ListUser;
+	}(_react2.default.Component);
+	
+	exports.default = ListUser;
 
 /***/ }
 /******/ ]);

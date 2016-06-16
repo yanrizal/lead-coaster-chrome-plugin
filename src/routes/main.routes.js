@@ -116,6 +116,12 @@ module.exports = function(app, passport) {
       res.render('index', { title: 'Help', user: user });
     });
 
+    app.get('/result', isLoggedIn, function(req, res) {
+      console.log(req.user);
+      let user = (req.user ? true : false);
+      res.render('index', { title: 'Result', user: user });
+    });
+
     app.get('/coaster/active', isLoggedIn, function(req, res) {
       console.log(req.user);
       let user = (req.user ? true : false);

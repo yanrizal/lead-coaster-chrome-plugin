@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 // import { routeActions } from 'react-router-redux';
-import { fetchPosts, startBot } from '../actions/actions';
-import TableCoaster from '../components/TableCoaster';
+import { fetchPosts } from '../actions/actions';
+import ListUser from '../components/ListUser';
 // import $ from 'jquery';
 
 
-class Coaster extends React.Component {
+class Result extends React.Component {
 
   constructor(props) {
     super(props);
@@ -20,9 +20,6 @@ class Coaster extends React.Component {
 
   handleStartClick = e => {
     console.log(e);
-    if(e.start){
-      dispatch(startBot());
-    }
   }
 
   render() {
@@ -30,8 +27,8 @@ class Coaster extends React.Component {
     return (
       <div className="dashboard">
         <div className="container">
-          <h1>Coaster</h1>
-          {!isFetching && <TableCoaster items={items} onStartClick={this.handleStartClick}/>}
+          <h1>Result</h1>
+          {!isFetching && <ListUser items={items}/>}
         </div>
       </div>
     );
@@ -52,4 +49,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Coaster);
+export default connect(mapStateToProps)(Result);

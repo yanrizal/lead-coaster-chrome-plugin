@@ -16,10 +16,10 @@ class TableCoaster extends React.Component{
           <tr key={idx}> 
             <th scope="row">Yanuar</th> 
             <td style={{width:'100px'}}><a href="">{items.urlSearch}</a></td> 
-            <td>{items.profileVisit.length} views</td> 
+            <td>{JSON.parse(items.profileVisit).length} views</td> 
             <td>{items.totalSearch}</td> 
             <td>0 Leads</td>
-            <td><a onClick={this.startBot}>Start</a></td>
+            <td><a style={{cursor:'pointer'}} onClick={this.startBot}>Start</a></td>
             <td><button>View Result</button></td>
           </tr> 
         )

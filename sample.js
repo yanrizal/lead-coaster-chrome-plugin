@@ -10,6 +10,29 @@ if (!fs.exists(path)){
 
 require('utils').dump(searchChrome);
 
+(function(){
+    // Convert array to object
+    var convArrToObj = function(array){
+        var thisEleObj = new Object();
+        if(typeof array == "object"){
+            for(var i in array){
+                var thisEle = convArrToObj(array[i]);
+                thisEleObj[i] = thisEle;
+            }
+        }else {
+            thisEleObj = array;
+        }
+        return thisEleObj;
+    };
+    var oldJSONStringify = JSON.stringify;
+    JSON.stringify = function(input){
+        if(oldJSONStringify(input) == '[]')
+            return oldJSONStringify(convArrToObj(input));
+        else
+            return oldJSONStringify(input);
+    };
+})();
+
 var casper = require('casper').create({   
     verbose: true,
     pageSettings: {
@@ -25,26 +48,25 @@ var lkdPassword = '@FYhdv9Y';
 var totalSearch = 0;
 
 //LOAD DATA
-var jsonData,dataProfile;
-var pathData = 'tmp/data-'+lkdUsername+'.json';
-if (!fs.exists(pathData)){
-  jsonData = {};
-  //require('utils').dump(jsonData);
-  dataProfile = [];
-}else{
-  jsonData = require(pathData);
-  require('utils').dump(jsonData);
-  dataProfile = jsonData.data[0].profileVisit;
-  console.log('length data', dataProfile.length)
-}
+var jsonData,dataProfile,page,urlSearch;
+
+// var pathData = 'tmp/data-'+lkdUsername+'.json';
+// if (!fs.exists(pathData)){
+//   jsonData = {};
+//   //require('utils').dump(jsonData);
+//   dataProfile = [];
+// }else{
+//   jsonData = require(pathData);
+//   require('utils').dump(jsonData);
+//   dataProfile = jsonData.data[0].profileVisit;
+//   console.log('length data', dataProfile.length)
+// }
 
 
 // GLOBAL VARIABLE
 var links;
 var i = -1;
-var page = Math.floor(dataProfile.length/10)+1;
-console.log('page', page);
-var urlSearch = 'https://www.linkedin.com/vsearch/p?type=people&keywords=yanuar&page_num='+page;
+
 
 function getLinks() {
     var allLinks = document.querySelectorAll('.main-headline');
@@ -58,14 +80,40 @@ function getRandomArbitrary(min, max) {
 }
 
 var url = 'https://www.linkedin.com/';
-casper.start(url, function() {
-	this.waitForSelector('form.login-form', function(){
-		 console.log('form loaded')
-		 this.fillSelectors('form.login-form', {
-	        'input#login-email' : lkdUsername,
-	        'input#login-password' : lkdPassword
-	    }, true);
-	});
+casper.start();
+
+casper.thenOpen("https://lead-coaster.herokuapp.com/getdata", {
+      method: 'post',
+      data:{
+          "lkdUsername": lkdUsername
+      }
+});
+
+casper.then(function() {
+    require('utils').dump(JSON.parse(this.getPageContent()));
+    jsonData = JSON.parse(this.getPageContent());
+    if (jsonData === null){
+      dataProfile = [];
+    } else {
+      dataProfile = JSON.parse(jsonData.data[0].profileVisit);
+      //console.log(dataProfile[0].fullName);
+      console.log(dataProfile.length)
+    }
+    console.log('retreive data');
+    page = Math.floor(dataProfile.length/10)+1;
+    console.log('page', page);
+    urlSearch = 'https://www.linkedin.com/vsearch/p?type=people&keywords=yanuar&page_num='+page;
+});
+
+
+casper.thenOpen(url, function(){
+  this.waitForSelector('form.login-form', function(){
+     console.log('form loaded')
+     this.fillSelectors('form.login-form', {
+          'input#login-email' : lkdUsername,
+          'input#login-password' : lkdPassword
+      }, true);
+  });
 });
 
 casper.waitWhileSelector('form.login-form', function(){
@@ -74,9 +122,7 @@ casper.waitWhileSelector('form.login-form', function(){
 
 casper.then(function(){
     console.log(this.getTitle());
-});
-
-casper.thenOpen(urlSearch, function() {
+    this.thenOpen(urlSearch, function() {
     console.log(this.getTitle());
     links = this.evaluate(getLinks);
     //console.log(links);
@@ -114,16 +160,21 @@ casper.thenOpen(urlSearch, function() {
         }).wait(getRandomArbitrary(5000,30000));
     });
 });
+});
 
-casper.thenOpen("http://localhost:3000/savedata", {
-      method: 'post',
-      data:{
-          "lkdUsername": lkdUsername,
-          "urlSearch": urlSearch,
-          "totalSearch": totalSearch,
-          "dataProfile": dataProfile,
-          "page": page
-      }
+
+
+casper.then(function(){
+  this.thenOpen("https://lead-coaster.herokuapp.com/savedata", {
+        method: 'post',
+        data:{
+            "lkdUsername": lkdUsername,
+            "urlSearch": urlSearch,
+            "totalSearch": totalSearch,
+            "dataProfile": JSON.stringify(dataProfile),
+            "page": page
+        }
+  });
 });
 
 casper.then(function(){
