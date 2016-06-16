@@ -116,7 +116,7 @@ export function startBot() {
     NProgress.start();
     dispatch(requestPosts());
     return $.ajax({
-      url: 'http://cron-leadcoaster/startapi',
+      url: 'http://localhost:8000/startapitest',
       dataType: 'json',
       cache: false,
       type: 'post',

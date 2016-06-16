@@ -23,12 +23,12 @@ class Result extends React.Component {
   }
 
   render() {
-    const {items, isFetching} = this.props
+    const {items, isFetching, profileVisit} = this.props
     return (
       <div className="dashboard">
         <div className="container">
           <h1>Result</h1>
-          {!isFetching && <ListUser items={items}/>}
+          {!isFetching && <ListUser items={items} profileVisit={profileVisit} />}
         </div>
       </div>
     );
@@ -42,10 +42,14 @@ function mapStateToProps(state) {
     isFetching: false,
     items: []
   };
+  const { profileVisit } = items[0] || {
+    profileVisit: []
+  }
   return {
     meta,
     isFetching,
-    items
+    items,
+    profileVisit
   };
 }
 

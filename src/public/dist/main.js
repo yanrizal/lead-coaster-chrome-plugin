@@ -2280,7 +2280,7 @@
 	    _nprogressNpm2.default.start();
 	    dispatch(requestPosts());
 	    return _jquery2.default.ajax({
-	      url: 'http://cron-leadcoaster/startapi',
+	      url: 'http://localhost:8000/startapitest',
 	      dataType: 'json',
 	      cache: false,
 	      type: 'post',
@@ -9484,6 +9484,8 @@
 	
 	var _reactRedux = __webpack_require__(5);
 	
+	var _reactRouterRedux = __webpack_require__(35);
+	
 	var _actions = __webpack_require__(31);
 	
 	var _TableCoaster = __webpack_require__(106);
@@ -9497,8 +9499,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// import { routeActions } from 'react-router-redux';
-	
 	
 	// import $ from 'jquery';
 	
@@ -9511,10 +9511,18 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Coaster).call(this, props));
 	
 	    _this.handleStartClick = function (e) {
+	      var dispatch = _this.props.dispatch;
+	
 	      console.log(e);
 	      if (e.start) {
 	        dispatch((0, _actions.startBot)());
 	      }
+	    };
+	
+	    _this.handleViewResult = function (e) {
+	      var dispatch = _this.props.dispatch;
+	
+	      dispatch(_reactRouterRedux.routerActions.push('/result'));
 	    };
 	
 	    return _this;
@@ -9546,7 +9554,7 @@
 	            null,
 	            'Coaster'
 	          ),
-	          !isFetching && _react2.default.createElement(_TableCoaster2.default, { items: items, onStartClick: this.handleStartClick })
+	          !isFetching && _react2.default.createElement(_TableCoaster2.default, { items: items, onStartClick: this.handleStartClick, onViewResult: this.handleViewResult })
 	        )
 	      );
 	    }
@@ -9624,6 +9632,10 @@
 	      _this.props.onStartClick({
 	        'start': true
 	      });
+	    }, _this.viewResult = function () {
+	      _this.props.onViewResult({
+	        'start': true
+	      });
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
 	
@@ -9635,6 +9647,7 @@
 	      var items = this.props.items;
 	
 	      var listNode = items.map(function (items, idx) {
+	        console.log(items.profileVisit);
 	        return _react2.default.createElement(
 	          'tr',
 	          { key: idx },
@@ -9682,7 +9695,7 @@
 	            null,
 	            _react2.default.createElement(
 	              'button',
-	              null,
+	              { onClick: _this2.viewResult },
 	              'View Result'
 	            )
 	          )
@@ -9814,6 +9827,7 @@
 	      var _props = this.props;
 	      var items = _props.items;
 	      var isFetching = _props.isFetching;
+	      var profileVisit = _props.profileVisit;
 	
 	      return _react2.default.createElement(
 	        'div',
@@ -9826,7 +9840,7 @@
 	            null,
 	            'Result'
 	          ),
-	          !isFetching && _react2.default.createElement(_ListUser2.default, { items: items })
+	          !isFetching && _react2.default.createElement(_ListUser2.default, { items: items, profileVisit: profileVisit })
 	        )
 	      );
 	    }
@@ -9849,10 +9863,17 @@
 	  var isFetching = _ref.isFetching;
 	  var items = _ref.items;
 	
+	  var _ref2 = items[0] || {
+	    profileVisit: []
+	  };
+	
+	  var profileVisit = _ref2.profileVisit;
+	
 	  return {
 	    meta: meta,
 	    isFetching: isFetching,
-	    items: items
+	    items: items,
+	    profileVisit: profileVisit
 	  };
 	}
 	
@@ -9910,22 +9931,33 @@
 	  _createClass(ListUser, [{
 	    key: 'render',
 	    value: function render() {
-	      var items = this.props.items;
+	      var _props = this.props;
+	      var items = _props.items;
+	      var profileVisit = _props.profileVisit;
 	
-	      var listNode = items.map(function (items, idx) {
+	      console.log(profileVisit);
+	      var pv = [];
+	      if (profileVisit[0] != null) {
+	        pv = JSON.parse(profileVisit);
+	      }
+	      //
+	      var listNode = pv.map(function (items, idx) {
 	        return _react2.default.createElement(
 	          'tr',
 	          { key: idx },
 	          _react2.default.createElement(
 	            'td',
 	            null,
-	            JSON.parse(items.profileVisit).length,
-	            ' views'
+	            items.fullName
 	          ),
 	          _react2.default.createElement(
 	            'td',
 	            null,
-	            items.totalSearch
+	            _react2.default.createElement(
+	              'a',
+	              { href: items.idUrl },
+	              items.idUrl
+	            )
 	          )
 	        );
 	      });

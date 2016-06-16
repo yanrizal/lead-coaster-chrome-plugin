@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import { routeActions } from 'react-router-redux';
+import { routerActions } from 'react-router-redux';
 import { fetchPosts, startBot } from '../actions/actions';
 import TableCoaster from '../components/TableCoaster';
 // import $ from 'jquery';
@@ -19,10 +19,16 @@ class Coaster extends React.Component {
   }
 
   handleStartClick = e => {
+    const { dispatch } = this.props;
     console.log(e);
     if(e.start){
       dispatch(startBot());
     }
+  }
+
+  handleViewResult = e => {
+    const { dispatch } = this.props;
+    dispatch(routerActions.push(`/result`));
   }
 
   render() {
@@ -31,7 +37,7 @@ class Coaster extends React.Component {
       <div className="dashboard">
         <div className="container">
           <h1>Coaster</h1>
-          {!isFetching && <TableCoaster items={items} onStartClick={this.handleStartClick}/>}
+          {!isFetching && <TableCoaster items={items} onStartClick={this.handleStartClick} onViewResult={this.handleViewResult} />}
         </div>
       </div>
     );

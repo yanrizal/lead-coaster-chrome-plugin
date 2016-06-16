@@ -10,12 +10,18 @@ class ListUser extends React.Component{
   }
 
 	render(){
-      const { items } = this.props;
-      const listNode = items.map((items,idx) => { 
+      const { items, profileVisit } = this.props;
+      console.log(profileVisit);
+      let pv = []
+      if (profileVisit[0] != null) {
+        pv = JSON.parse(profileVisit);
+      }
+      //
+      const listNode = pv.map((items,idx) => { 
         return(
           <tr key={idx}>
-            <td>{JSON.parse(items.profileVisit).length} views</td> 
-            <td>{items.totalSearch}</td>
+            <td>{items.fullName}</td> 
+            <td><a href={items.idUrl}>{items.idUrl}</a></td>
           </tr> 
         )
       });

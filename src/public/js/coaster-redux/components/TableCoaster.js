@@ -9,9 +9,16 @@ class TableCoaster extends React.Component{
     });
   }
 
+  viewResult = () => {
+    this.props.onViewResult({
+      'start':true
+    });
+  }
+
 	render(){
       const { items } = this.props;
       const listNode = items.map((items,idx) => { 
+        console.log(items.profileVisit)
         return(
           <tr key={idx}> 
             <th scope="row">Yanuar</th> 
@@ -20,7 +27,7 @@ class TableCoaster extends React.Component{
             <td>{items.totalSearch}</td> 
             <td>0 Leads</td>
             <td><a style={{cursor:'pointer'}} onClick={this.startBot}>Start</a></td>
-            <td><button>View Result</button></td>
+            <td><button onClick={this.viewResult}>View Result</button></td>
           </tr> 
         )
       });
