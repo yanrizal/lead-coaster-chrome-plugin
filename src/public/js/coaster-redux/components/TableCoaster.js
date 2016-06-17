@@ -3,9 +3,19 @@ import $ from 'jquery'
 
 class TableCoaster extends React.Component{
 
-  startBot = () => {
+  startBot = e => {
+    $(e.target).hide();
+    $(e.target).next().show();
     this.props.onStartClick({
       'start':true
+    });
+  }
+
+  pauseBot = e => {
+    $(e.target).hide();
+    $(e.target).prev().show();
+    this.props.onStartClick({
+      'start':false
     });
   }
 
@@ -26,7 +36,7 @@ class TableCoaster extends React.Component{
             <td>{JSON.parse(items.profileVisit).length} views</td> 
             <td>{items.totalSearch}</td> 
             <td>0 Leads</td>
-            <td><a style={{cursor:'pointer'}} onClick={this.startBot}>Start</a></td>
+            <td><a style={{cursor:'pointer'}} onClick={this.startBot}>Start</a><a style={{display:'none',cursor:'pointer'}} className="pause" onClick={this.pauseBot}>Pause</a></td>
             <td><button onClick={this.viewResult}>View Result</button></td>
           </tr> 
         )

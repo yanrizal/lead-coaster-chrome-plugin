@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import { fetchPosts, startBot } from '../actions/actions';
 import TableCoaster from '../components/TableCoaster';
+import swal from 'sweetalert';
 // import $ from 'jquery';
 
 
@@ -22,6 +23,12 @@ class Coaster extends React.Component {
     const { dispatch } = this.props;
     console.log(e);
     if(e.start){
+      swal({   
+        title: "Bot Running",   
+        text: "Please wait about 10 minutes to see the result",   
+        type: "info",  
+        closeOnConfirm: false, 
+      });
       dispatch(startBot());
     }
   }

@@ -53,6 +53,7 @@ export function signupPost(email, password) {
       success: function(response) {
         console.log(response);
         NProgress.done();
+        window.location.href = '/help';
         dispatch(receivePosts('signup', response));
       },
       error: function(xhr, status, err) {
@@ -114,7 +115,7 @@ export function fetchPosts(email) {
 export function startBot() {
   return dispatch => {
     NProgress.start();
-    dispatch(requestPosts());
+    //dispatch(requestPosts());
     return $.ajax({
       url: 'http://localhost:8000/startapitest',
       dataType: 'json',
