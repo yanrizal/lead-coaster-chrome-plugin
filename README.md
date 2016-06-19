@@ -22,12 +22,15 @@ login with
 email: test@gmail.com 
 password: coaster
 
+click coaster on navigation or visit localhost:3000/coaster/active
+
 ```
 
 ### Quick start crawler app
 
 ```bash
 # setup
+open new terminal
 git clone https://github.com/yanrizal/cron-lead-coaster.git
 cd cron-lead-coaster
 npm install  
@@ -38,3 +41,5 @@ npm start
 ```
 
 after two app running you can test with click start on localhost:3000/coaster/active
+
+you can see the log on crawler terminal
