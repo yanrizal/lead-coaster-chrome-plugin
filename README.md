@@ -22,6 +22,8 @@ login with
 email: test@gmail.com 
 password: coaster
 
+```
+
 ### Quick start crawler app
 
 ```bash
@@ -33,5 +35,6 @@ npm install
 # start the server (starts babel-node with nodemon)
 npm start 
 
+```
 
 after two app running you can test with click start on localhost:3000/coaster/active
