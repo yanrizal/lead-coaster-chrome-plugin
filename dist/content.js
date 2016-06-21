@@ -42,13 +42,6 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(1);
-
-
-/***/ },
-/* 1 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -71,19 +64,47 @@
 	};
 	
 	var renderStatus = function renderStatus(statusText) {
-	  document.getElementById('status').textContent = statusText;
+	  //document.getElementById('status').textContent = statusText;
 	};
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	  getCurrentTabUrl(function (url) {
-	    renderStatus(url);
+	    //renderStatus(url);
 	  });
 	  var findBtn = document.getElementById('find');
 	  findBtn.addEventListener('click', function () {
 	    var value = document.getElementById('search').value;
 	    console.log(value);
 	  });
+	
+	  loginLoaded();
 	});
+	
+	var loginLoaded = function loginLoaded() {
+	  var loginBtn = document.getElementById('loginBtn');
+	  var email = document.getElementById('inputEmail').value;
+	  var password = document.getElementById('inputPassword').value;
+	
+	  loginBtn.addEventListener('click', function () {
+	    console.log('log');
+	    $.ajax({
+	      url: 'http://localhost:3000/login-chrome',
+	      dataType: 'json',
+	      cache: false,
+	      type: 'post',
+	      data: {
+	        email: email,
+	        password: password
+	      },
+	      success: function success(response) {
+	        console.log(response);
+	      },
+	      error: function error(xhr, status, err) {
+	        console.error(xhr);
+	      }
+	    });
+	  });
+	};
 
 /***/ }
 /******/ ]);

@@ -22,13 +22,21 @@
         overflow: hidden;
         width: 250px;
       }
-      #search{
+      input{
         width: 150px;
         height: 20px;
+        margin-bottom: 5px;
       }
-      #find{
+      label{
+        display: block;
+        margin-bottom: 10px;
+      }
+      #find,#loginBtn{
         height: 30px;
         margin-left: 10px;
+      }
+      .searchField{
+        display: none;
       }
     </style>
 
@@ -38,11 +46,20 @@
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
+    <script src="jquery.js"></script>
     <script src="content.js"></script>
   </head>
   <body>
     <div id="content">
-    <input id="search" type="text"><button id="find">Run</button>
+      <div class="loginField">
+        <label>login leadcoaster</label>
+        <input type="text" placeholder="email" id="inputEmail">
+        <input type="password" placeholder="password" id="inputPassword">
+        <button id="loginBtn">Login</button>
+      </div>
+      <div class="searchField">
+        <input id="search" type="text"><button id="find">Run</button>
+      </div>
     </div>
   </body>
 </html>

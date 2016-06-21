@@ -3,12 +3,13 @@ var webpack = require('webpack');
 
 module.exports = {
   devtool: 'eval',
-  entry: [
-    './src/public/js/coaster-redux/index.js'
-  ],
+  entry: {
+    "src/public/dist/main" : "./src/public/js/coaster-redux/index.js",
+    "dist/content": "./chrome-extension/content.js"
+  },
   output: {
-    path: './src/public/dist',
-    filename: 'main.js'
+    path: '',
+    filename: '[name].js'
   },
   externals: {
     "react": "React",

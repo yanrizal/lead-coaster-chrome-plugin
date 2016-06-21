@@ -91,6 +91,32 @@ module.exports = function(app, passport) {
       })(req, res, next);
     });
 
+    app.post('/login-chrome', function(req, res, next) {
+      passport.authenticate('local-login', function(err, user, info) { 
+        console.log(err);
+        console.log(info);
+        console.log(user);
+        if (err) { return next(err); }
+        if (!user) { 
+          res.json({
+            data: []
+          });
+          return false;
+        }
+        req.logIn(user, function(err) {
+            console.log('user',user.local.email);
+            if (err) { return next(err); }
+            const params = {
+              username: user.local.email
+            } 
+            findFile(params, (err, response) => {
+              console.log(response);
+              res.json(response);
+            });
+        });
+      })(req, res, next);
+    });
+
     app.get('/signup', function(req, res) {
       let user = (req.user ? true : false);
       res.render('index', { title: 'signup', user: user });
