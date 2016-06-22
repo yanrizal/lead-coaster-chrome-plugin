@@ -11,6 +11,7 @@
   },
   "permissions": [
     "activeTab",
+    "https://lead-coaster.herokuapp.com/",
     "https://ajax.googleapis.com/"
   ]
 }

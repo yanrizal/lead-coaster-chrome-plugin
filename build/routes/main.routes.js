@@ -101,6 +101,19 @@ module.exports = function (app, passport) {
     });
   });
 
+  app.post('/adddata', jsonParser, function (req, res) {
+    var params = {
+      profileVisit: [],
+      totalSearch: 0,
+      urlSearch: req.body.urlSearch,
+      username: req.body.username
+    };
+    (0, _modelsFile.addFile)(params, function (err, response) {
+      console.log(response);
+      res.json(response);
+    });
+  });
+
   app.get('/login', function (req, res) {
     var user = req.user ? true : false;
     res.render('index', { title: 'login', user: user });

@@ -7,7 +7,7 @@ import querystring from 'querystring';
 import fs from 'fs';
 import chalk from 'chalk';
 import passport from 'passport';
-import { saveFile, findFile } from '../models/file';
+import { saveFile, findFile, addFile } from '../models/file';
 
 // const clientID = '759dlh2okqws42';
 // const clientSecret = 'OnnN8xW3X5zecdei';
@@ -65,6 +65,19 @@ module.exports = function(app, passport) {
         username: req.body.lkdUsername
       };
       findFile(params, (err, response) => {
+        console.log(response);
+        res.json(response);
+      });
+    });
+
+    app.post('/adddata', jsonParser, (req, res) => {
+      const params = {
+        profileVisit: [],
+        totalSearch: 0,
+        urlSearch: req.body.urlSearch,
+        username: req.body.username
+      };
+      addFile(params, (err, response) => {
         console.log(response);
         res.json(response);
       });

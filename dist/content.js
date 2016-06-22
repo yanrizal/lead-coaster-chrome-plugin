@@ -46,6 +46,30 @@
 
 	'use strict';
 	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	(function () {
+	  // Convert array to object
+	  var convArrToObj = function convArrToObj(array) {
+	    var thisEleObj = new Object();
+	    if ((typeof array === 'undefined' ? 'undefined' : _typeof(array)) == "object") {
+	      for (var i in array) {
+	        var thisEle = convArrToObj(array[i]);
+	        thisEleObj[i] = thisEle;
+	      }
+	    } else {
+	      thisEleObj = array;
+	    }
+	    return thisEleObj;
+	  };
+	  var oldJSONStringify = JSON.stringify;
+	  JSON.stringify = function (input) {
+	    if (oldJSONStringify(input) == '[]') return oldJSONStringify(convArrToObj(input));else return oldJSONStringify(input);
+	  };
+	})();
+	
+	var username = '';
+	
 	var getCurrentTabUrl = function getCurrentTabUrl(callback) {
 	  // Query filter to be passed to chrome.tabs.query - see
 	  // https://developer.chrome.com/extensions/tabs#method-query
@@ -71,24 +95,18 @@
 	  getCurrentTabUrl(function (url) {
 	    //renderStatus(url);
 	  });
+	
+	  addSearch();
+	  loginLoaded();
+	});
+	
+	var addSearch = function addSearch() {
 	  var findBtn = document.getElementById('find');
 	  findBtn.addEventListener('click', function () {
 	    var value = document.getElementById('search').value;
 	    console.log(value);
-	  });
-	
-	  loginLoaded();
-	});
-	
-	var loginLoaded = function loginLoaded() {
-	  var loginBtn = document.getElementById('loginBtn');
-	  var email = document.getElementById('inputEmail').value;
-	  var password = document.getElementById('inputPassword').value;
-	
-	  loginBtn.addEventListener('click', function () {
-	    console.log('log');
 	    $.ajax({
-	      url: 'http://localhost:3000/login-chrome',
+	      url: 'https://lead-coaster.herokuapp.com/login-chrome',
 	      dataType: 'json',
 	      cache: false,
 	      type: 'post',
@@ -98,6 +116,52 @@
 	      },
 	      success: function success(response) {
 	        console.log(response);
+	        $('.login-status').text('');
+	        if (response.data.length === 0) {
+	          console.log('zero');
+	          $('.login-status').text('username/password wrong');
+	        } else {
+	          console.log('ada');
+	          username = email;
+	          //const profileVisit = JSON.parse(response.data[0].profileVisit);
+	          $('.loginField').hide();
+	          $('.searchField').show();
+	        }
+	      },
+	      error: function error(xhr, status, err) {
+	        console.error(xhr);
+	      }
+	    });
+	  });
+	};
+	
+	var loginLoaded = function loginLoaded() {
+	  var loginBtn = document.getElementById('loginBtn');
+	  loginBtn.addEventListener('click', function () {
+	    var email = document.getElementById('inputEmail').value;
+	    var password = document.getElementById('inputPassword').value;
+	    $.ajax({
+	      url: 'https://lead-coaster.herokuapp.com/login-chrome',
+	      dataType: 'json',
+	      cache: false,
+	      type: 'post',
+	      data: {
+	        email: email,
+	        password: password
+	      },
+	      success: function success(response) {
+	        console.log(response);
+	        $('.login-status').text('');
+	        if (response.data.length === 0) {
+	          console.log('zero');
+	          $('.login-status').text('username/password wrong');
+	        } else {
+	          console.log('ada');
+	          username = email;
+	          //const profileVisit = JSON.parse(response.data[0].profileVisit);
+	          $('.loginField').hide();
+	          $('.searchField').show();
+	        }
 	      },
 	      error: function error(xhr, status, err) {
 	        console.error(xhr);

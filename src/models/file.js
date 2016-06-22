@@ -24,6 +24,25 @@ export const findFile = (params, cb) => {
   });
 };
 
+export const addFile = (params, cb) => {
+  console.log(params.username);
+  File.findOne({ 'data.username': params.username }, (err, file) => {
+    console.log(file);
+    if (err) return cb(err);
+    file.data.push(params);
+      file.save((err, response) => {
+        console.log(response);
+        const result = {
+          successfully_updated: false
+        };
+        if (err) return cb(null, result);
+        result.successfully_updated = true;
+        cb(null, result);
+        return true;
+      });
+  });
+};
+
 export const saveFile = (params, cb) => {
   let result = {};
   console.log(params.data[0].username);
