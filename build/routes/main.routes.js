@@ -53,7 +53,8 @@ module.exports = function (app, passport) {
 
   app.get('/', function (req, res) {
     var user = req.user ? true : false;
-    res.render('index', { title: 'index', user: user });
+    var email = req.user ? req.user.local.email : '';
+    res.render('index', { title: 'index', user: user, email: email });
   });
 
   app.post('/post/url', jsonParser, function (req, res) {
@@ -106,7 +107,8 @@ module.exports = function (app, passport) {
       profileVisit: [],
       totalSearch: 0,
       urlSearch: req.body.urlSearch,
-      username: req.body.username
+      username: req.body.username,
+      searchName: req.body.searchName
     };
     (0, _modelsFile.addFile)(params, function (err, response) {
       console.log(response);
@@ -198,19 +200,22 @@ module.exports = function (app, passport) {
   app.get('/help', isLoggedIn, function (req, res) {
     console.log(req.user);
     var user = req.user ? true : false;
-    res.render('index', { title: 'Help', user: user });
+    var email = req.user ? req.user.local.email : '';
+    res.render('index', { title: 'Help', user: user, email: email });
   });
 
   app.get('/result', isLoggedIn, function (req, res) {
     console.log(req.user);
     var user = req.user ? true : false;
-    res.render('index', { title: 'Result', user: user });
+    var email = req.user ? req.user.local.email : '';
+    res.render('index', { title: 'Result', user: user, email: email });
   });
 
   app.get('/coaster/active', isLoggedIn, function (req, res) {
     console.log(req.user);
     var user = req.user ? true : false;
-    res.render('index', { title: 'Coaster Active', user: user });
+    var email = req.user ? req.user.local.email : '';
+    res.render('index', { title: 'Coaster Active', user: user, email: email });
   });
 
   app.post('/coaster/api', jsonParser, function (req, res) {

@@ -9537,7 +9537,7 @@
 	    value: function componentDidMount() {
 	      var dispatch = this.props.dispatch;
 	
-	      var email = 'yanuar.rizal@mbiz.co.id';
+	      var email = document.getElementById('idEmail').value;
 	      dispatch((0, _actions.fetchPosts)(email));
 	    }
 	  }, {
@@ -9659,14 +9659,16 @@
 	      var items = this.props.items;
 	
 	      var listNode = items.map(function (items, idx) {
+	        console.log(items);
 	        console.log(items.profileVisit);
+	        var lengthPV = items.profileVisit.length === 0 ? 0 : JSON.parse(items.profileVisit).length;
 	        return _react2.default.createElement(
 	          'tr',
 	          { key: idx },
 	          _react2.default.createElement(
 	            'th',
 	            { scope: 'row' },
-	            'Yanuar'
+	            items.searchName
 	          ),
 	          _react2.default.createElement(
 	            'td',
@@ -9680,7 +9682,7 @@
 	          _react2.default.createElement(
 	            'td',
 	            null,
-	            JSON.parse(items.profileVisit).length,
+	            lengthPV,
 	            ' views'
 	          ),
 	          _react2.default.createElement(

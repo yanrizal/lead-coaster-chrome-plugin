@@ -22,7 +22,8 @@ module.exports = function(app, passport) {
 
     app.get('/', function(req, res) {
       let user = (req.user ? true : false);
-      res.render('index', { title: 'index', user: user });
+      let email = (req.user ? req.user.local.email : '');
+      res.render('index', { title: 'index', user: user, email: email });
     });
 
     app.post('/post/url', jsonParser, (req, res) => {
@@ -75,7 +76,8 @@ module.exports = function(app, passport) {
         profileVisit: [],
         totalSearch: 0,
         urlSearch: req.body.urlSearch,
-        username: req.body.username
+        username: req.body.username,
+        searchName: req.body.searchName
       };
       addFile(params, (err, response) => {
         console.log(response);
@@ -152,19 +154,22 @@ module.exports = function(app, passport) {
     app.get('/help', isLoggedIn, function(req, res) {
       console.log(req.user);
       let user = (req.user ? true : false);
-      res.render('index', { title: 'Help', user: user });
+      let email = (req.user ? req.user.local.email : '');
+      res.render('index', { title: 'Help', user: user, email: email });
     });
 
     app.get('/result', isLoggedIn, function(req, res) {
       console.log(req.user);
       let user = (req.user ? true : false);
-      res.render('index', { title: 'Result', user: user });
+      let email = (req.user ? req.user.local.email : '');
+      res.render('index', { title: 'Result', user: user, email: email });
     });
 
     app.get('/coaster/active', isLoggedIn, function(req, res) {
       console.log(req.user);
       let user = (req.user ? true : false);
-      res.render('index', { title: 'Coaster Active', user: user });
+      let email = (req.user ? req.user.local.email : '');
+      res.render('index', { title: 'Coaster Active', user: user, email: email });
     });
 
     app.post('/coaster/api', jsonParser, (req, res) => {

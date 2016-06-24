@@ -28,12 +28,14 @@ class TableCoaster extends React.Component{
 	render(){
       const { items } = this.props;
       const listNode = items.map((items,idx) => { 
+        console.log(items);
         console.log(items.profileVisit)
+        let lengthPV = (items.profileVisit.length === 0 ? 0 : JSON.parse(items.profileVisit).length);
         return(
           <tr key={idx}> 
-            <th scope="row">Yanuar</th> 
+            <th scope="row">{items.searchName}</th> 
             <td style={{width:'100px'}}><a href="">{items.urlSearch}</a></td> 
-            <td>{JSON.parse(items.profileVisit).length} views</td> 
+            <td>{lengthPV} views</td> 
             <td>{items.totalSearch}</td> 
             <td>0 Leads</td>
             <td><a style={{cursor:'pointer'}} onClick={this.startBot}>Start</a><a style={{display:'none',cursor:'pointer'}} className="pause" onClick={this.pauseBot}>Pause</a></td>

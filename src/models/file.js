@@ -5,7 +5,8 @@ const fileSchema = new mongoose.Schema({
 	  username: { type: String },
 	  urlSearch: { type: String },
 	  totalSearch: { type: String },
-	  profileVisit: { type: Array }
+	  profileVisit: { type: Array },
+    searchName: { type: String }
 	}],
 	meta:{
 	  lastPage: { type: Number }

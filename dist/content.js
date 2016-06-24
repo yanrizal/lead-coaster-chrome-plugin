@@ -104,28 +104,25 @@
 	  var findBtn = document.getElementById('find');
 	  findBtn.addEventListener('click', function () {
 	    var value = document.getElementById('search').value;
+	    var searchName = document.getElementById('searchName').value;
 	    console.log(value);
 	    $.ajax({
-	      url: 'https://lead-coaster.herokuapp.com/login-chrome',
+	      url: 'https://lead-coaster.herokuapp.com/adddata',
 	      dataType: 'json',
 	      cache: false,
 	      type: 'post',
 	      data: {
-	        email: email,
-	        password: password
+	        username: username,
+	        urlSearch: value,
+	        searchName: searchName
 	      },
 	      success: function success(response) {
 	        console.log(response);
-	        $('.login-status').text('');
-	        if (response.data.length === 0) {
-	          console.log('zero');
-	          $('.login-status').text('username/password wrong');
+	        $('.add-status').text('');
+	        if (response.successfully_updated) {
+	          $('.add-status').text('url added');
 	        } else {
-	          console.log('ada');
-	          username = email;
-	          //const profileVisit = JSON.parse(response.data[0].profileVisit);
-	          $('.loginField').hide();
-	          $('.searchField').show();
+	          $('.add-status').text('failed');
 	        }
 	      },
 	      error: function error(xhr, status, err) {
@@ -140,6 +137,8 @@
 	  loginBtn.addEventListener('click', function () {
 	    var email = document.getElementById('inputEmail').value;
 	    var password = document.getElementById('inputPassword').value;
+	    $('#loginBtn').attr('disabled', true);
+	    $('#loginBtn').text('wait');
 	    $.ajax({
 	      url: 'https://lead-coaster.herokuapp.com/login-chrome',
 	      dataType: 'json',
@@ -151,6 +150,8 @@
 	      },
 	      success: function success(response) {
 	        console.log(response);
+	        $('#loginBtn').attr('disabled', false);
+	        $('#loginBtn').text('login');
 	        $('.login-status').text('');
 	        if (response.data.length === 0) {
 	          console.log('zero');

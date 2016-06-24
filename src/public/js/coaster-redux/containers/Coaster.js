@@ -15,7 +15,7 @@ class Coaster extends React.Component {
 
   componentDidMount(){
     const { dispatch } = this.props;
-    const email = 'yanuar.rizal@mbiz.co.id'
+    const email = document.getElementById('idEmail').value;
     dispatch(fetchPosts(email));
   }
 
