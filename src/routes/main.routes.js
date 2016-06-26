@@ -158,7 +158,7 @@ module.exports = function(app, passport) {
       res.render('index', { title: 'Help', user: user, email: email });
     });
 
-    app.get('/result', isLoggedIn, function(req, res) {
+    app.get('/result/:id', isLoggedIn, function(req, res) {
       console.log(req.user);
       let user = (req.user ? true : false);
       let email = (req.user ? req.user.local.email : '');

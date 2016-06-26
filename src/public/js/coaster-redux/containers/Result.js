@@ -14,16 +14,13 @@ class Result extends React.Component {
 
   componentDidMount(){
     const { dispatch } = this.props;
-    const email = 'yanuar.rizal@mbiz.co.id'
+    const email = document.getElementById('idEmail').value;
     dispatch(fetchPosts(email));
   }
 
-  handleStartClick = e => {
-    console.log(e);
-  }
-
   render() {
-    const {items, isFetching, profileVisit} = this.props
+    const {items, isFetching, profileVisit, params} = this.props
+    console.log(profileVisit);
     return (
       <div className="dashboard">
         <div className="container">
@@ -36,13 +33,20 @@ class Result extends React.Component {
 }
 
 function mapStateToProps(state) {
+  const path = window.location.pathname;
+  const str = path.split("/");
+  let index = 0;
+  if(str[1] === 'result'){
+    index = parseInt(str[2]);
+  }
+  console.log(str);
   const { signupApi, postsByApi } = state;
   const { meta, isFetching, items } = postsByApi.data || {
     meta: {},
     isFetching: false,
     items: []
   };
-  const { profileVisit } = items[0] || {
+  const { profileVisit } = items[index] || {
     profileVisit: []
   }
   return {

@@ -165,7 +165,7 @@
 	            _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _Signup2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/help', component: _Help2.default }),
 	            _react2.default.createElement(_reactRouter.Route, { path: '/coaster/:active', component: _Coaster2.default }),
-	            _react2.default.createElement(_reactRouter.Route, { path: '/result', component: _Result2.default })
+	            _react2.default.createElement(_reactRouter.Route, { path: '/result/:id', component: _Result2.default })
 	          )
 	        )
 	      );
@@ -2269,7 +2269,7 @@
 	  };
 	}
 	
-	function startBot() {
+	function startBot(e) {
 	  return function (dispatch) {
 	    _nprogressNpm2.default.start();
 	    //dispatch(requestPosts());
@@ -2278,6 +2278,10 @@
 	      dataType: 'json',
 	      cache: false,
 	      type: 'post',
+	      data: {
+	        searchId: e.id,
+	        username: e.username
+	      },
 	      success: function success(response) {
 	        console.log(response);
 	        //NProgress.done();
@@ -9519,14 +9523,14 @@
 	          type: "info",
 	          closeOnConfirm: false
 	        });
-	        dispatch((0, _actions.startBot)());
+	        dispatch((0, _actions.startBot)(e));
 	      }
 	    };
 	
 	    _this.handleViewResult = function (e) {
 	      var dispatch = _this.props.dispatch;
 	
-	      dispatch(_reactRouterRedux.routerActions.push('/result'));
+	      dispatch(_reactRouterRedux.routerActions.push('/result/' + e.id));
 	    };
 	
 	    return _this;
@@ -9636,7 +9640,9 @@
 	      (0, _jquery2.default)(e.target).hide();
 	      (0, _jquery2.default)(e.target).next().show();
 	      _this.props.onStartClick({
-	        'start': true
+	        'start': true,
+	        'id': e.target.getAttribute('data-id'),
+	        'username': document.getElementById('idEmail').value
 	      });
 	    }, _this.pauseBot = function (e) {
 	      (0, _jquery2.default)(e.target).hide();
@@ -9644,9 +9650,10 @@
 	      _this.props.onStartClick({
 	        'start': false
 	      });
-	    }, _this.viewResult = function () {
+	    }, _this.viewResult = function (e) {
 	      _this.props.onViewResult({
-	        'start': true
+	        'start': true,
+	        'id': e.target.getAttribute('data-id')
 	      });
 	    }, _temp), _possibleConstructorReturn(_this, _ret);
 	  }
@@ -9659,8 +9666,6 @@
 	      var items = this.props.items;
 	
 	      var listNode = items.map(function (items, idx) {
-	        console.log(items);
-	        console.log(items.profileVisit);
 	        var lengthPV = items.profileVisit.length === 0 ? 0 : JSON.parse(items.profileVisit).length;
 	        return _react2.default.createElement(
 	          'tr',
@@ -9700,7 +9705,7 @@
 	            null,
 	            _react2.default.createElement(
 	              'a',
-	              { style: { cursor: 'pointer' }, onClick: _this2.startBot },
+	              { style: { cursor: 'pointer' }, 'data-id': idx, onClick: _this2.startBot },
 	              'Start'
 	            ),
 	            _react2.default.createElement(
@@ -9714,7 +9719,7 @@
 	            null,
 	            _react2.default.createElement(
 	              'button',
-	              { onClick: _this2.viewResult },
+	              { 'data-id': idx, onClick: _this2.viewResult },
 	              'View Result'
 	            )
 	          )
@@ -11115,13 +11120,7 @@
 	  function Result(props) {
 	    _classCallCheck(this, Result);
 	
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Result).call(this, props));
-	
-	    _this.handleStartClick = function (e) {
-	      console.log(e);
-	    };
-	
-	    return _this;
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Result).call(this, props));
 	  }
 	
 	  _createClass(Result, [{
@@ -11129,7 +11128,7 @@
 	    value: function componentDidMount() {
 	      var dispatch = this.props.dispatch;
 	
-	      var email = 'yanuar.rizal@mbiz.co.id';
+	      var email = document.getElementById('idEmail').value;
 	      dispatch((0, _actions.fetchPosts)(email));
 	    }
 	  }, {
@@ -11139,7 +11138,9 @@
 	      var items = _props.items;
 	      var isFetching = _props.isFetching;
 	      var profileVisit = _props.profileVisit;
+	      var params = _props.params;
 	
+	      console.log(profileVisit);
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'dashboard' },
@@ -11161,6 +11162,13 @@
 	}(_react2.default.Component);
 	
 	function mapStateToProps(state) {
+	  var path = window.location.pathname;
+	  var str = path.split("/");
+	  var index = 0;
+	  if (str[1] === 'result') {
+	    index = parseInt(str[2]);
+	  }
+	  console.log(str);
 	  var signupApi = state.signupApi;
 	  var postsByApi = state.postsByApi;
 	
@@ -11174,7 +11182,7 @@
 	  var isFetching = _ref.isFetching;
 	  var items = _ref.items;
 	
-	  var _ref2 = items[0] || {
+	  var _ref2 = items[index] || {
 	    profileVisit: []
 	  };
 	

@@ -24,7 +24,7 @@ class Root extends React.Component {
             <Route path="/signup" component={Signup} />
             <Route path="/help" component={Help} />
             <Route path="/coaster/:active" component={Coaster}/>
-            <Route path="/result" component={Result}/>
+            <Route path="/result/:id" component={Result}/>
           </Route>
         </Router>
       </Provider>

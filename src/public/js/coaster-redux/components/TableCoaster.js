@@ -7,7 +7,9 @@ class TableCoaster extends React.Component{
     $(e.target).hide();
     $(e.target).next().show();
     this.props.onStartClick({
-      'start':true
+      'start':true,
+      'id':e.target.getAttribute('data-id'),
+      'username':document.getElementById('idEmail').value
     });
   }
 
@@ -19,17 +21,16 @@ class TableCoaster extends React.Component{
     });
   }
 
-  viewResult = () => {
+  viewResult = e => {
     this.props.onViewResult({
-      'start':true
+      'start':true,
+      'id':e.target.getAttribute('data-id')
     });
   }
 
 	render(){
       const { items } = this.props;
       const listNode = items.map((items,idx) => { 
-        console.log(items);
-        console.log(items.profileVisit)
         let lengthPV = (items.profileVisit.length === 0 ? 0 : JSON.parse(items.profileVisit).length);
         return(
           <tr key={idx}> 
@@ -38,8 +39,8 @@ class TableCoaster extends React.Component{
             <td>{lengthPV} views</td> 
             <td>{items.totalSearch}</td> 
             <td>0 Leads</td>
-            <td><a style={{cursor:'pointer'}} onClick={this.startBot}>Start</a><a style={{display:'none',cursor:'pointer'}} className="pause" onClick={this.pauseBot}>Pause</a></td>
-            <td><button onClick={this.viewResult}>View Result</button></td>
+            <td><a style={{cursor:'pointer'}} data-id={idx} onClick={this.startBot}>Start</a><a style={{display:'none',cursor:'pointer'}} className="pause" onClick={this.pauseBot}>Pause</a></td>
+            <td><button data-id={idx} onClick={this.viewResult}>View Result</button></td>
           </tr> 
         )
       });

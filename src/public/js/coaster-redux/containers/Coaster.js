@@ -29,13 +29,13 @@ class Coaster extends React.Component {
         type: "info",  
         closeOnConfirm: false, 
       });
-      dispatch(startBot());
+      dispatch(startBot(e));
     }
   }
 
   handleViewResult = e => {
     const { dispatch } = this.props;
-    dispatch(routerActions.push(`/result`));
+    dispatch(routerActions.push(`/result/${e.id}`));
   }
 
   render() {

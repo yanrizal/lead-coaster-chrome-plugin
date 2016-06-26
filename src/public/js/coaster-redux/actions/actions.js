@@ -112,7 +112,7 @@ export function fetchPosts(email) {
   };
 }
 
-export function startBot() {
+export function startBot(e) {
   return dispatch => {
     NProgress.start();
     //dispatch(requestPosts());
@@ -121,6 +121,10 @@ export function startBot() {
       dataType: 'json',
       cache: false,
       type: 'post',
+      data: {
+        searchId:e.id,
+        username:e.username
+      },
       success: function(response) {
         console.log(response);
         //NProgress.done();
