@@ -112,19 +112,16 @@ export function fetchPosts(email) {
   };
 }
 
-export function startBot(e) {
+export function postJson(url, e) {
   return dispatch => {
     NProgress.start();
     //dispatch(requestPosts());
     return $.ajax({
-      url: 'http://localhost:8000/startapitest',
+      url: url,
       dataType: 'json',
       cache: false,
       type: 'post',
-      data: {
-        searchId:e.id,
-        username:e.username
-      },
+      data: e,
       success: function(response) {
         console.log(response);
         //NProgress.done();

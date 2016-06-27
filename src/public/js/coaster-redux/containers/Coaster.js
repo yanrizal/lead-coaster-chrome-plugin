@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
-import { fetchPosts, startBot } from '../actions/actions';
+import { fetchPosts, postJson } from '../actions/actions';
 import TableCoaster from '../components/TableCoaster';
 import swal from 'sweetalert';
+import config from '../config.json'
 // import $ from 'jquery';
-
+const URL_POST_STARTBOT = `${config.serverURL}/startapitest`;
 
 class Coaster extends React.Component {
 
@@ -29,7 +30,7 @@ class Coaster extends React.Component {
         type: "info",  
         closeOnConfirm: false, 
       });
-      dispatch(startBot(e));
+      dispatch(postJson(URL_POST_STARTBOT,e));
     }
   }
 
@@ -38,13 +39,21 @@ class Coaster extends React.Component {
     dispatch(routerActions.push(`/result/${e.id}`));
   }
 
+  handleDeleteCoaster = e => {
+    const { dispatch } = this.props;
+    //dispatch(routerActions.push(`/result/${e.id}`));
+  }
+
   render() {
     const {items, isFetching} = this.props
     return (
       <div className="dashboard">
         <div className="container">
           <h1>Coaster</h1>
-          {!isFetching && <TableCoaster items={items} onStartClick={this.handleStartClick} onViewResult={this.handleViewResult} />}
+          {!isFetching && <TableCoaster items={items} 
+          onStartClick={this.handleStartClick} 
+          onViewResult={this.handleViewResult} 
+          onDeleteCoaster={this.handleDeleteCoaster}/>}
         </div>
       </div>
     );

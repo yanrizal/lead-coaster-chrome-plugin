@@ -125,7 +125,7 @@
 	
 	var _Coaster2 = _interopRequireDefault(_Coaster);
 	
-	var _Result = __webpack_require__(115);
+	var _Result = __webpack_require__(116);
 	
 	var _Result2 = _interopRequireDefault(_Result);
 	
@@ -2147,7 +2147,7 @@
 	exports.signupPost = signupPost;
 	exports.loginPost = loginPost;
 	exports.fetchPosts = fetchPosts;
-	exports.startBot = startBot;
+	exports.postJson = postJson;
 	
 	var _jquery = __webpack_require__(31);
 	
@@ -2269,19 +2269,16 @@
 	  };
 	}
 	
-	function startBot(e) {
+	function postJson(url, e) {
 	  return function (dispatch) {
 	    _nprogressNpm2.default.start();
 	    //dispatch(requestPosts());
 	    return _jquery2.default.ajax({
-	      url: 'http://localhost:8000/startapitest',
+	      url: url,
 	      dataType: 'json',
 	      cache: false,
 	      type: 'post',
-	      data: {
-	        searchId: e.id,
-	        username: e.username
-	      },
+	      data: e,
 	      success: function success(response) {
 	        console.log(response);
 	        //NProgress.done();
@@ -9494,6 +9491,10 @@
 	
 	var _sweetalert2 = _interopRequireDefault(_sweetalert);
 	
+	var _config = __webpack_require__(115);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -9503,6 +9504,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	// import $ from 'jquery';
+	var URL_POST_STARTBOT = _config2.default.serverURL + '/startapitest';
 	
 	var Coaster = function (_React$Component) {
 	  _inherits(Coaster, _React$Component);
@@ -9523,7 +9525,7 @@
 	          type: "info",
 	          closeOnConfirm: false
 	        });
-	        dispatch((0, _actions.startBot)(e));
+	        dispatch((0, _actions.postJson)(URL_POST_STARTBOT, e));
 	      }
 	    };
 	
@@ -9531,6 +9533,11 @@
 	      var dispatch = _this.props.dispatch;
 	
 	      dispatch(_reactRouterRedux.routerActions.push('/result/' + e.id));
+	    };
+	
+	    _this.handleDeleteCoaster = function (e) {
+	      var dispatch = _this.props.dispatch;
+	      //dispatch(routerActions.push(`/result/${e.id}`));
 	    };
 	
 	    return _this;
@@ -9562,7 +9569,10 @@
 	            null,
 	            'Coaster'
 	          ),
-	          !isFetching && _react2.default.createElement(_TableCoaster2.default, { items: items, onStartClick: this.handleStartClick, onViewResult: this.handleViewResult })
+	          !isFetching && _react2.default.createElement(_TableCoaster2.default, { items: items,
+	            onStartClick: this.handleStartClick,
+	            onViewResult: this.handleViewResult,
+	            onDeleteCoaster: this.handleDeleteCoaster })
 	        )
 	      );
 	    }
@@ -9641,7 +9651,7 @@
 	      (0, _jquery2.default)(e.target).next().show();
 	      _this.props.onStartClick({
 	        'start': true,
-	        'id': e.target.getAttribute('data-id'),
+	        'searchId': e.target.getAttribute('data-id'),
 	        'username': document.getElementById('idEmail').value
 	      });
 	    }, _this.pauseBot = function (e) {
@@ -9652,6 +9662,11 @@
 	      });
 	    }, _this.viewResult = function (e) {
 	      _this.props.onViewResult({
+	        'start': true,
+	        'id': e.target.getAttribute('data-id')
+	      });
+	    }, _this.deleteCoaster = function (e) {
+	      _this.props.onDeleteCoaster({
 	        'start': true,
 	        'id': e.target.getAttribute('data-id')
 	      });
@@ -9712,6 +9727,12 @@
 	              'a',
 	              { style: { display: 'none', cursor: 'pointer' }, className: 'pause', onClick: _this2.pauseBot },
 	              'Pause'
+	            ),
+	            ' | ',
+	            _react2.default.createElement(
+	              'a',
+	              { style: { cursor: 'pointer' }, 'data-id': idx, onClick: _this2.deleteCoaster },
+	              'Delete'
 	            )
 	          ),
 	          _react2.default.createElement(
@@ -11080,6 +11101,14 @@
 
 /***/ },
 /* 115 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"serverURL": "http://localhost:8000"
+	};
+
+/***/ },
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11098,7 +11127,7 @@
 	
 	var _actions = __webpack_require__(30);
 	
-	var _ListUser = __webpack_require__(116);
+	var _ListUser = __webpack_require__(117);
 	
 	var _ListUser2 = _interopRequireDefault(_ListUser);
 	
@@ -11199,7 +11228,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Result);
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

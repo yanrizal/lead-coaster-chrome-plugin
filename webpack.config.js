@@ -19,6 +19,7 @@ module.exports = {
   devtool: 'source-map',
   module: {
     loaders: [
+          { test: /\.json$/, loader: 'json' },
           {
             test: /\.js?$/, 
             loader: 'babel-loader',

@@ -65,6 +65,7 @@
     "eslint-config-airbnb": "^6.2.0",
     "eslint-plugin-babel": "^3.1.0",
     "eslint-plugin-react": "^4.2.3",
+    "json-loader": "^0.5.4",
     "nodemon": "1.8.0",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.1"
