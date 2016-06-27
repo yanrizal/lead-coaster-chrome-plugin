@@ -4,6 +4,22 @@
 a REST API server using express.js and ES6
 and build for production -->
 
+### Chrome plugin start
+
+```bash
+
+git clone or pull https://github.com/yanrizal/lead-coaster-chrome-plugin.git 
+click load unpacked extension and select dist folder
+reload the extension
+
+login with 
+email: test@gmail.com 
+password: coaster
+
+add the search url
+
+```
+
 ### Quick start
 
 ```bash
