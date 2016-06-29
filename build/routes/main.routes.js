@@ -160,7 +160,7 @@ module.exports = function (app, passport) {
       }
       if (!user) {
         res.json({
-          data: []
+          login: 'failed'
         });
         return false;
       }
@@ -169,14 +169,17 @@ module.exports = function (app, passport) {
         if (err) {
           return next(err);
         }
-        var params = {
-          username: user.local.email
-        };
-        (0, _modelsFile.findFile)(params, function (err, response) {
-          console.log(response);
-          console.log(err);
-          res.json(response);
+        return res.json({
+          login: 'success'
         });
+        // const params = {
+        //   username: user.local.email
+        // }
+        // findFile(params, (err, response) => {
+        //   console.log(response);
+        //   console.log(err);
+        //   res.json(response);
+        // });
       });
     })(req, res, next);
   });

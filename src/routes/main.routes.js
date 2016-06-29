@@ -122,21 +122,24 @@ module.exports = (app, passport) => {
         if (err) { return next(err); }
         if (!user) { 
           res.json({
-            data: []
+            login: 'failed'
           });
           return false;
         }
         req.logIn(user, (err) => {
             console.log('user',user.local.email);
             if (err) { return next(err); }
-            const params = {
-              username: user.local.email
-            } 
-            findFile(params, (err, response) => {
-              console.log(response);
-              console.log(err);
-              res.json(response);
+            return res.json({
+              login: 'success'
             });
+            // const params = {
+            //   username: user.local.email
+            // } 
+            // findFile(params, (err, response) => {
+            //   console.log(response);
+            //   console.log(err);
+            //   res.json(response);
+            // });
         });
       })(req, res, next);
     });
