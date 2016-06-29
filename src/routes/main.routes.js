@@ -78,8 +78,10 @@ module.exports = (app, passport) => {
       const params = {
         data:[{
           urlSearch: req.body.urlSearch,
-          profileVisit: [],
           totalSearch: '0',
+          profileVisit: [],
+          leadCount: 0,
+          dataIndex: 0,
           searchName: req.body.searchName,
           lastPage: 0
         }],

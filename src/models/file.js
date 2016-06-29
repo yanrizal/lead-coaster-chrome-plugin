@@ -28,40 +28,37 @@ export const findFile = (params, cb) => {
 };
 
 export const addFile = (params, cb) => {
+  let result = {};
   console.log(params.meta.username);
   File.findOne({ 'meta.username': params.meta.username }, (err, file) => {
     console.log(file);
-    params.leadCount = '0';
-    params.dataIndex = file.data.length;
     if (file === null) {
-    file.data.push(params);
-      file.save((err, response) => {
+      const newFile = new File(params);
+      newFile.save((err, response) => {
         console.log(response);
-        const result = {
-          successfully_updated: false
+        result = {
+          successfully_created: false
         };
         if (err) return cb(null, result);
-        result.successfully_updated = true;
+        result.successfully_created = true;
         cb(null, result);
         return true;
       });
     }
     else {
-      const index = params.data[0].dataIndex;
-      file.data[index].totalSearch = params.data[0].totalSearch;
-      //file.meta.lastPage = params.meta.lastPage;
-      console.log(params.data[0].totalSearch);
-      file.save((err, response) => {
-                console.log(response);
-                console.log(err);
-                const result = {
-                  successfully_updated: false
-                };
-                if (err) return cb(null, result);
-                result.successfully_updated = true;
-                cb(null, result);
-                return true;
-              });
+      params.data[0].leadCount = 0;
+      params.data[0].dataIndex = file.data.length;
+      file.data.push(params.data[0]);
+        file.save((err, response) => {
+          console.log(response);
+          const result = {
+            successfully_updated: false
+          };
+          if (err) return cb(null, result);
+          result.successfully_updated = true;
+          cb(null, result);
+          return true;
+        });
     }
   });
 };

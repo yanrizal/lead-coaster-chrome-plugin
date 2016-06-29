@@ -39,31 +39,28 @@ var findFile = function findFile(params, cb) {
 
 exports.findFile = findFile;
 var addFile = function addFile(params, cb) {
+  var result = {};
   console.log(params.meta.username);
   File.findOne({ 'meta.username': params.meta.username }, function (err, file) {
     console.log(file);
-    params.leadCount = '0';
-    params.dataIndex = file.data.length;
     if (file === null) {
-      file.data.push(params);
-      file.save(function (err, response) {
+      var newFile = new File(params);
+      newFile.save(function (err, response) {
         console.log(response);
-        var result = {
-          successfully_updated: false
+        result = {
+          successfully_created: false
         };
         if (err) return cb(null, result);
-        result.successfully_updated = true;
+        result.successfully_created = true;
         cb(null, result);
         return true;
       });
     } else {
-      var index = params.data[0].dataIndex;
-      file.data[index].totalSearch = params.data[0].totalSearch;
-      //file.meta.lastPage = params.meta.lastPage;
-      console.log(params.data[0].totalSearch);
+      params.data[0].leadCount = 0;
+      params.data[0].dataIndex = file.data.length;
+      file.data.push(params.data[0]);
       file.save(function (err, response) {
         console.log(response);
-        console.log(err);
         var result = {
           successfully_updated: false
         };
