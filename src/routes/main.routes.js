@@ -18,41 +18,44 @@ import { saveFile, findFile, addFile } from '../models/file';
 const jsonParser = bodyParser.json();
 
 // app/routes.js
-module.exports = function(app, passport) {
+module.exports = (app, passport) => {
 
-    app.get('/', function(req, res) {
+    app.get('/', (req, res) => {
       let user = (req.user ? true : false);
       let email = (req.user ? req.user.local.email : '');
       res.render('index', { title: 'index', user: user, email: email });
     });
 
-    app.post('/post/url', jsonParser, (req, res) => {
-      const params = {
-        url: req.body.url
-      };
-      console.log(params.url);
-      const outputFilename = 'tmp/mysearch.json';
+    // app.post('/post/url', jsonParser, (req, res) => {
+    //   const params = {
+    //     url: req.body.url
+    //   };
+    //   console.log(params.url);
+    //   const outputFilename = 'tmp/mysearch.json';
 
-      fs.writeFile(outputFilename, JSON.stringify(params, null, 4), function(err) {
-          if(err) {
-            console.log(err);
-          } else {
-            console.log("JSON saved to " + outputFilename);
-          }
-      });
-      res.json(params.url);
-    });
+    //   fs.writeFile(outputFilename, JSON.stringify(params, null, 4), function(err) {
+    //       if(err) {
+    //         console.log(err);
+    //       } else {
+    //         console.log("JSON saved to " + outputFilename);
+    //       }
+    //   });
+    //   res.json(params.url);
+    // });
 
     app.post('/savedata', jsonParser, (req, res) => {
       const params = {
         data:[{
-          username: req.body.lkdUsername,
           urlSearch: req.body.urlSearch,
           totalSearch: req.body.totalSearch,
-          profileVisit: req.body.dataProfile
+          profileVisit: req.body.dataProfile,
+          leadCount: req.body.leadCount,
+          dataIndex: req.body.dataIndex,
+          searchName: req.body.searchName,
+          lastPage: req.body.page
         }],
         meta:{
-          lastPage: req.body.page
+          username: req.body.lkdUsername
         }
       };
       saveFile(params, (err, response) => {
@@ -73,11 +76,16 @@ module.exports = function(app, passport) {
 
     app.post('/adddata', jsonParser, (req, res) => {
       const params = {
-        profileVisit: [],
-        totalSearch: 0,
-        urlSearch: req.body.urlSearch,
-        username: req.body.username,
-        searchName: req.body.searchName
+        data:[{
+          urlSearch: req.body.urlSearch,
+          profileVisit: [],
+          totalSearch: '0',
+          searchName: req.body.searchName,
+          lastPage: 0
+        }],
+        meta:{
+          username: req.body.username
+        }
       };
       addFile(params, (err, response) => {
         console.log(response);
@@ -86,13 +94,13 @@ module.exports = function(app, passport) {
     });
 
 
-    app.get('/login', function(req, res) {
+    app.get('/login', (req, res) => {
       let user = (req.user ? true : false);
       res.render('index', { title: 'login', user: user });
     });
 
     // process the login form
-    app.post('/login', function(req, res, next) {
+    app.post('/login', (req, res, next) => {
       passport.authenticate('local-login', function(err, user, info) { 
         console.log(err);
         console.log(info);
@@ -106,7 +114,7 @@ module.exports = function(app, passport) {
       })(req, res, next);
     });
 
-    app.post('/login-chrome', function(req, res, next) {
+    app.post('/login-chrome', (req, res, next) => {
       passport.authenticate('local-login', function(err, user, info) { 
         console.log(err);
         console.log(info);
@@ -118,7 +126,7 @@ module.exports = function(app, passport) {
           });
           return false;
         }
-        req.logIn(user, function(err) {
+        req.logIn(user, (err) => {
             console.log('user',user.local.email);
             if (err) { return next(err); }
             const params = {
@@ -126,19 +134,20 @@ module.exports = function(app, passport) {
             } 
             findFile(params, (err, response) => {
               console.log(response);
+              console.log(err);
               res.json(response);
             });
         });
       })(req, res, next);
     });
 
-    app.get('/signup', function(req, res) {
+    app.get('/signup', (req, res) => {
       let user = (req.user ? true : false);
       res.render('index', { title: 'signup', user: user });
     });
 
-    app.post('/signup', function(req, res, next) {
-      passport.authenticate('local-signup', function(err, user, info) { 
+    app.post('/signup', (req, res, next) => {
+      passport.authenticate('local-signup', (err, user, info) => { 
         console.log(err);
         console.log(info);
         console.log(user);
@@ -151,21 +160,21 @@ module.exports = function(app, passport) {
       })(req, res, next);
     });
 
-    app.get('/help', isLoggedIn, function(req, res) {
+    app.get('/help', isLoggedIn, (req, res) => {
       console.log(req.user);
       let user = (req.user ? true : false);
       let email = (req.user ? req.user.local.email : '');
       res.render('index', { title: 'Help', user: user, email: email });
     });
 
-    app.get('/result/:id', isLoggedIn, function(req, res) {
+    app.get('/result/:id', isLoggedIn, (req, res) => {
       console.log(req.user);
       let user = (req.user ? true : false);
       let email = (req.user ? req.user.local.email : '');
       res.render('index', { title: 'Result', user: user, email: email });
     });
 
-    app.get('/coaster/active', isLoggedIn, function(req, res) {
+    app.get('/coaster/active', isLoggedIn, (req, res) => {
       console.log(req.user);
       let user = (req.user ? true : false);
       let email = (req.user ? req.user.local.email : '');
@@ -178,21 +187,21 @@ module.exports = function(app, passport) {
       };
       let obj;
       const file = 'tmp/data-'+params.email+'.json';
-      fs.readFile(file, 'utf8', function (err, data) {
+      fs.readFile(file, 'utf8', (err, data) => {
         if (err) throw err;
         obj = JSON.parse(data);
         res.json(obj);
       });
     });
 
-    app.get('/logout', function(req, res) {
+    app.get('/logout', (req, res) => {
         req.logout();
         res.redirect('/');
     });
 };
 
 // route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
+const isLoggedIn = (req, res, next) => {
 
     // if user is authenticated in the session, carry on 
     if (req.isAuthenticated())

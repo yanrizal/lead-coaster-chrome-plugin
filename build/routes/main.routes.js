@@ -57,33 +57,36 @@ module.exports = function (app, passport) {
     res.render('index', { title: 'index', user: user, email: email });
   });
 
-  app.post('/post/url', jsonParser, function (req, res) {
-    var params = {
-      url: req.body.url
-    };
-    console.log(params.url);
-    var outputFilename = 'tmp/mysearch.json';
+  // app.post('/post/url', jsonParser, (req, res) => {
+  //   const params = {
+  //     url: req.body.url
+  //   };
+  //   console.log(params.url);
+  //   const outputFilename = 'tmp/mysearch.json';
 
-    _fs2['default'].writeFile(outputFilename, JSON.stringify(params, null, 4), function (err) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("JSON saved to " + outputFilename);
-      }
-    });
-    res.json(params.url);
-  });
+  //   fs.writeFile(outputFilename, JSON.stringify(params, null, 4), function(err) {
+  //       if(err) {
+  //         console.log(err);
+  //       } else {
+  //         console.log("JSON saved to " + outputFilename);
+  //       }
+  //   });
+  //   res.json(params.url);
+  // });
 
   app.post('/savedata', jsonParser, function (req, res) {
     var params = {
       data: [{
-        username: req.body.lkdUsername,
         urlSearch: req.body.urlSearch,
         totalSearch: req.body.totalSearch,
-        profileVisit: req.body.dataProfile
+        profileVisit: req.body.dataProfile,
+        leadCount: req.body.leadCount,
+        dataIndex: req.body.dataIndex,
+        searchName: req.body.searchName,
+        lastPage: req.body.page
       }],
       meta: {
-        lastPage: req.body.page
+        username: req.body.lkdUsername
       }
     };
     (0, _modelsFile.saveFile)(params, function (err, response) {
@@ -104,11 +107,16 @@ module.exports = function (app, passport) {
 
   app.post('/adddata', jsonParser, function (req, res) {
     var params = {
-      profileVisit: [],
-      totalSearch: 0,
-      urlSearch: req.body.urlSearch,
-      username: req.body.username,
-      searchName: req.body.searchName
+      data: [{
+        urlSearch: req.body.urlSearch,
+        profileVisit: [],
+        totalSearch: '0',
+        searchName: req.body.searchName,
+        lastPage: 0
+      }],
+      meta: {
+        username: req.body.username
+      }
     };
     (0, _modelsFile.addFile)(params, function (err, response) {
       console.log(response);
@@ -166,6 +174,7 @@ module.exports = function (app, passport) {
         };
         (0, _modelsFile.findFile)(params, function (err, response) {
           console.log(response);
+          console.log(err);
           res.json(response);
         });
       });
@@ -238,12 +247,12 @@ module.exports = function (app, passport) {
 };
 
 // route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
+var isLoggedIn = function isLoggedIn(req, res, next) {
 
   // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) return next();
 
   // if they aren't redirect them to the home page
   res.redirect('/');
-}
+};
 //# sourceMappingURL=main.routes.js.map
