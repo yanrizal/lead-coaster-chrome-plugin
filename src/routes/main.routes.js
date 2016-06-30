@@ -108,7 +108,14 @@ module.exports = (app, passport) => {
         console.log(info);
         console.log(user);
         if (err) { return next(err); }
-        if (!user) { return res.redirect('/login'); }
+        if (!user) { 
+          res.status(401);
+          res.json({
+            "status": 401,
+            "message": "Invalid credentials"
+          });
+          return res.redirect('/login'); 
+        }
         req.logIn(user, function(err) {
             if (err) { return next(err); }
             return res.json({detail: info});

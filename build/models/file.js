@@ -94,6 +94,7 @@ var saveFile = function saveFile(params, cb) {
     } else {
       var index = params.data[0].dataIndex;
       file.data[index].totalSearch = params.data[0].totalSearch;
+      file.data[index].profileVisit = params.data[0].profileVisit;
       //file.meta.lastPage = params.meta.lastPage;
       console.log(params.data[0].totalSearch);
       file.save(function (err, response) {

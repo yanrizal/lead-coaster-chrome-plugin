@@ -121,6 +121,8 @@
 	        $('.add-status').text('');
 	        if (response.successfully_updated) {
 	          $('.add-status').text('url added');
+	        } else if (response.successfully_created) {
+	          $('.add-status').text('url added');
 	        } else {
 	          $('.add-status').text('failed');
 	        }

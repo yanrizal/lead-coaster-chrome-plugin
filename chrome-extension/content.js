@@ -74,7 +74,11 @@ const addSearch = () => {
         $('.add-status').text('');
         if(response.successfully_updated){
           $('.add-status').text('url added');
-        }else{
+        }
+        else if(response.successfully_created){
+           $('.add-status').text('url added');
+        }
+        else {
           $('.add-status').text('failed');
         }
       },
@@ -106,16 +110,23 @@ const loginLoaded = () => {
         $('#loginBtn').attr('disabled',false);
         $('#loginBtn').text('login');
         $('.login-status').text('');
-        if(response.data.length === 0){
-          console.log('zero')
-          $('.login-status').text('username/password wrong')
-        }else{
-          console.log('ada');
+        if(response.login === 'success'){
           username = email;
-          //const profileVisit = JSON.parse(response.data[0].profileVisit);
           $('.loginField').hide();
           $('.searchField').show();
+        } else {
+          $('.login-status').text('username/password wrong')
         }
+        // if(response.data.length === 0){
+        //   console.log('zero')
+        //   $('.login-status').text('username/password wrong')
+        // }else{
+        //   console.log('ada');
+        //   username = email;
+        //   //const profileVisit = JSON.parse(response.data[0].profileVisit);
+        //   $('.loginField').hide();
+        //   $('.searchField').show();
+        // }
       },
       error: function(xhr, status, err) {
         console.error(xhr);
