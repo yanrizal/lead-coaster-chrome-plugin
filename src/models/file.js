@@ -84,6 +84,8 @@ export const saveFile = (params, cb) => {
       const index = params.data[0].dataIndex;
       file.data[index].totalSearch = params.data[0].totalSearch;
       file.data[index].profileVisit = params.data[0].profileVisit;
+      file.data[index].lastPage = params.data[0].lastPage;
+      file.data[index].leadCount = params.data[0].leadCount;
       //file.meta.lastPage = params.meta.lastPage;
       console.log(params.data[0].totalSearch);
       file.save((err, response) => {
