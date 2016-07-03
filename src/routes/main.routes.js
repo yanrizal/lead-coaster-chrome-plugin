@@ -7,14 +7,8 @@ import querystring from 'querystring';
 import fs from 'fs';
 import chalk from 'chalk';
 import passport from 'passport';
-import { saveFile, findFile, addFile } from '../models/file';
-
-// const clientID = '759dlh2okqws42';
-// const clientSecret = 'OnnN8xW3X5zecdei';
-// const proxy = 'http://101.96.10.30:84';
-// const agent = new HttpsProxyAgent(proxy);
-
-// const router = express.Router();
+import { saveFile, findFile, addFile, addLinkedin } from '../models/file';
+import jwt from 'jwt-simple';
 const jsonParser = bodyParser.json();
 
 // app/routes.js
@@ -23,27 +17,11 @@ module.exports = (app, passport) => {
     app.get('/', (req, res) => {
       let user = (req.user ? true : false);
       let email = (req.user ? req.user.local.email : '');
+      //console.log(req.body);
       res.render('index', { title: 'index', user: user, email: email });
     });
 
-    // app.post('/post/url', jsonParser, (req, res) => {
-    //   const params = {
-    //     url: req.body.url
-    //   };
-    //   console.log(params.url);
-    //   const outputFilename = 'tmp/mysearch.json';
-
-    //   fs.writeFile(outputFilename, JSON.stringify(params, null, 4), function(err) {
-    //       if(err) {
-    //         console.log(err);
-    //       } else {
-    //         console.log("JSON saved to " + outputFilename);
-    //       }
-    //   });
-    //   res.json(params.url);
-    // });
-
-    app.post('/savedata', jsonParser, (req, res) => {
+    app.post('/api/v1/savedata', jsonParser, (req, res) => {
       const params = {
         data:[{
           urlSearch: req.body.urlSearch,
@@ -55,7 +33,11 @@ module.exports = (app, passport) => {
           lastPage: req.body.page
         }],
         meta:{
-          username: req.body.lkdUsername
+          username: req.body.lkdUsername,
+          linkedin: {
+            email: '',
+            password: ''
+          }
         }
       };
       saveFile(params, (err, response) => {
@@ -64,7 +46,7 @@ module.exports = (app, passport) => {
       });
     });
 
-    app.post('/getdata', jsonParser, (req, res) => {
+    app.post('/api/v1/getdata', jsonParser, (req, res) => {
       const params = {
         username: req.body.lkdUsername
       };
@@ -74,7 +56,19 @@ module.exports = (app, passport) => {
       });
     });
 
-    app.post('/adddata', jsonParser, (req, res) => {
+    app.post('/api/v1/linkedin/post', jsonParser, (req, res) => {
+      const params = {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+      };
+      addLinkedin(params, (err, response) => {
+        console.log(response);
+        res.json(response);
+      });
+    });
+
+    app.post('/api/v1/adddata', jsonParser, (req, res) => {
       const params = {
         data:[{
           urlSearch: req.body.urlSearch,
@@ -86,7 +80,11 @@ module.exports = (app, passport) => {
           lastPage: 0
         }],
         meta:{
-          username: req.body.username
+          username: req.body.username,
+          linkedin: {
+            email: '',
+            password: ''
+          }
         }
       };
       addFile(params, (err, response) => {
@@ -114,11 +112,12 @@ module.exports = (app, passport) => {
             "status": 401,
             "message": "Invalid credentials"
           });
-          return res.redirect('/login'); 
+          return;
+          //return res.redirect('/login'); 
         }
         req.logIn(user, function(err) {
             if (err) { return next(err); }
-            return res.json({detail: info});
+            return res.json(genToken(user));
         });
       })(req, res, next);
     });
@@ -141,14 +140,6 @@ module.exports = (app, passport) => {
             return res.json({
               login: 'success'
             });
-            // const params = {
-            //   username: user.local.email
-            // } 
-            // findFile(params, (err, response) => {
-            //   console.log(response);
-            //   console.log(err);
-            //   res.json(response);
-            // });
         });
       })(req, res, next);
     });
@@ -193,19 +184,6 @@ module.exports = (app, passport) => {
       res.render('index', { title: 'Coaster Active', user: user, email: email });
     });
 
-    app.post('/coaster/api', jsonParser, (req, res) => {
-      const params = {
-        email: req.body.email
-      };
-      let obj;
-      const file = 'tmp/data-'+params.email+'.json';
-      fs.readFile(file, 'utf8', (err, data) => {
-        if (err) throw err;
-        obj = JSON.parse(data);
-        res.json(obj);
-      });
-    });
-
     app.get('/logout', (req, res) => {
         req.logout();
         res.redirect('/');
@@ -223,6 +201,24 @@ const isLoggedIn = (req, res, next) => {
     res.redirect('/');
 }
 
+// private method
+const genToken = (user) => {
+  const expires = expiresIn(7); // 7 days
+  const token = jwt.encode({
+    exp: expires
+  }, require('../config/secret')());
+  console.log(token);
+  return {
+    token: token,
+    expires: expires,
+    user: user
+  };
+}
+
+const expiresIn = (numDays) => {
+  var dateObj = new Date();
+  return dateObj.setDate(dateObj.getDate() + numDays);
+}
 
 
 

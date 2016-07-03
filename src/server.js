@@ -52,6 +52,7 @@ app.use(function (req, res, next) {
 });
 
 // routes ======================================================================
+//app.all('/api/v1/*', [require('./middlewares/validateRequest')]);
 require('./routes/main.routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 

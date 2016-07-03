@@ -21,7 +21,6 @@ function receivePosts(type, json) {
 
 export const IS_LOGIN = 'IS_LOGIN';
 function isLog(isLogin){
-  console.log(isLogin);
   return {
     type: IS_LOGIN,
     value: isLogin
@@ -94,7 +93,7 @@ export function fetchPosts(email) {
     NProgress.start();
     dispatch(requestPosts());
     return $.ajax({
-      url: '/getdata',
+      url: '/api/v1/getdata',
       dataType: 'json',
       cache: false,
       type: 'post',

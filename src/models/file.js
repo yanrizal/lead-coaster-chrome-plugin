@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import crypto from 'crypto';
+import assert from 'assert';
 
 const fileSchema = new mongoose.Schema({
   data:[{
@@ -11,7 +13,11 @@ const fileSchema = new mongoose.Schema({
     lastPage: { type: Number }
 	}],
 	meta:{
-    username: { type: String }
+    username: { type: String },
+    linkedin: {
+      email: {type: String},
+      password: {type: String}
+    }
 	}
 });
 
@@ -24,6 +30,32 @@ export const findFile = (params, cb) => {
     if (err) return cb(err);
     cb(null, file);
     return true;
+  });
+};
+
+export const addLinkedin = (params, cb) => {
+  console.log(params.username);
+  File.findOne({ 'meta.username': params.username }, (err, file) => {
+    console.log(file);
+    if (err) return cb(err);
+    const algorithm = 'aes256';
+    const key = 'password';
+    const passwordKey = params.password;
+    const cipher = crypto.createCipher(algorithm, key);
+    const encrypted = cipher.update(passwordKey, 'utf8', 'hex') + cipher.final('hex');
+    console.log(encrypted);
+    file.meta.linkedin.email = params.email;
+    file.meta.linkedin.password = encrypted;
+    file.save((err, response) => {
+      console.log(response);
+      const result = {
+        successfully_updated: false
+      };
+      if (err) return cb(null, result);
+      result.successfully_updated = true;
+      cb(null, result);
+      return true;
+    });
   });
 };
 

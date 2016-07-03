@@ -2,11 +2,13 @@ import { combineReducers } from 'redux';
 import { routeReducer } from 'react-router-redux';
 import { REQUEST_POSTS, RECEIVE_POSTS, IS_LOGIN } from '../actions/actions';
 import { UPDATE_LOCATION } from 'react-router-redux';
+import messages from './message';
 
 function posts(state = {
   isFetching: false,
   didInvalidate: false,
   items: [],
+  meta:{},
   status: false}, action) {
   switch (action.type) {
     case REQUEST_POSTS:
@@ -103,6 +105,7 @@ const rootReducer = combineReducers({
   isLog,
   postsByApi,
   routing: routeReducer,
+  messages
   // selectedSearchType,
   // routing: routeReducer,
   // updateUrl

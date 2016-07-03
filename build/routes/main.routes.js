@@ -40,12 +40,10 @@ var _passport2 = _interopRequireDefault(_passport);
 
 var _modelsFile = require('../models/file');
 
-// const clientID = '759dlh2okqws42';
-// const clientSecret = 'OnnN8xW3X5zecdei';
-// const proxy = 'http://101.96.10.30:84';
-// const agent = new HttpsProxyAgent(proxy);
+var _jwtSimple = require('jwt-simple');
 
-// const router = express.Router();
+var _jwtSimple2 = _interopRequireDefault(_jwtSimple);
+
 var jsonParser = _bodyParser2['default'].json();
 
 // app/routes.js
@@ -54,27 +52,11 @@ module.exports = function (app, passport) {
   app.get('/', function (req, res) {
     var user = req.user ? true : false;
     var email = req.user ? req.user.local.email : '';
+    //console.log(req.body);
     res.render('index', { title: 'index', user: user, email: email });
   });
 
-  // app.post('/post/url', jsonParser, (req, res) => {
-  //   const params = {
-  //     url: req.body.url
-  //   };
-  //   console.log(params.url);
-  //   const outputFilename = 'tmp/mysearch.json';
-
-  //   fs.writeFile(outputFilename, JSON.stringify(params, null, 4), function(err) {
-  //       if(err) {
-  //         console.log(err);
-  //       } else {
-  //         console.log("JSON saved to " + outputFilename);
-  //       }
-  //   });
-  //   res.json(params.url);
-  // });
-
-  app.post('/savedata', jsonParser, function (req, res) {
+  app.post('/api/v1/savedata', jsonParser, function (req, res) {
     var params = {
       data: [{
         urlSearch: req.body.urlSearch,
@@ -86,7 +68,11 @@ module.exports = function (app, passport) {
         lastPage: req.body.page
       }],
       meta: {
-        username: req.body.lkdUsername
+        username: req.body.lkdUsername,
+        linkedin: {
+          email: '',
+          password: ''
+        }
       }
     };
     (0, _modelsFile.saveFile)(params, function (err, response) {
@@ -95,7 +81,7 @@ module.exports = function (app, passport) {
     });
   });
 
-  app.post('/getdata', jsonParser, function (req, res) {
+  app.post('/api/v1/getdata', jsonParser, function (req, res) {
     var params = {
       username: req.body.lkdUsername
     };
@@ -105,7 +91,19 @@ module.exports = function (app, passport) {
     });
   });
 
-  app.post('/adddata', jsonParser, function (req, res) {
+  app.post('/api/v1/linkedin/post', jsonParser, function (req, res) {
+    var params = {
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    };
+    (0, _modelsFile.addLinkedin)(params, function (err, response) {
+      console.log(response);
+      res.json(response);
+    });
+  });
+
+  app.post('/api/v1/adddata', jsonParser, function (req, res) {
     var params = {
       data: [{
         urlSearch: req.body.urlSearch,
@@ -117,7 +115,11 @@ module.exports = function (app, passport) {
         lastPage: 0
       }],
       meta: {
-        username: req.body.username
+        username: req.body.username,
+        linkedin: {
+          email: '',
+          password: ''
+        }
       }
     };
     (0, _modelsFile.addFile)(params, function (err, response) {
@@ -146,13 +148,14 @@ module.exports = function (app, passport) {
           "status": 401,
           "message": "Invalid credentials"
         });
-        return res.redirect('/login');
+        return;
+        //return res.redirect('/login');
       }
       req.logIn(user, function (err) {
         if (err) {
           return next(err);
         }
-        return res.json({ detail: info });
+        return res.json(genToken(user));
       });
     })(req, res, next);
   });
@@ -179,14 +182,6 @@ module.exports = function (app, passport) {
         return res.json({
           login: 'success'
         });
-        // const params = {
-        //   username: user.local.email
-        // }
-        // findFile(params, (err, response) => {
-        //   console.log(response);
-        //   console.log(err);
-        //   res.json(response);
-        // });
       });
     })(req, res, next);
   });
@@ -237,19 +232,6 @@ module.exports = function (app, passport) {
     res.render('index', { title: 'Coaster Active', user: user, email: email });
   });
 
-  app.post('/coaster/api', jsonParser, function (req, res) {
-    var params = {
-      email: req.body.email
-    };
-    var obj = undefined;
-    var file = 'tmp/data-' + params.email + '.json';
-    _fs2['default'].readFile(file, 'utf8', function (err, data) {
-      if (err) throw err;
-      obj = JSON.parse(data);
-      res.json(obj);
-    });
-  });
-
   app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
@@ -264,5 +246,24 @@ var isLoggedIn = function isLoggedIn(req, res, next) {
 
   // if they aren't redirect them to the home page
   res.redirect('/');
+};
+
+// private method
+var genToken = function genToken(user) {
+  var expires = expiresIn(7); // 7 days
+  var token = _jwtSimple2['default'].encode({
+    exp: expires
+  }, require('../config/secret')());
+  console.log(token);
+  return {
+    token: token,
+    expires: expires,
+    user: user
+  };
+};
+
+var expiresIn = function expiresIn(numDays) {
+  var dateObj = new Date();
+  return dateObj.setDate(dateObj.getDate() + numDays);
 };
 //# sourceMappingURL=main.routes.js.map
