@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
-import { loginPost } from '../actions/actions';
+import { loginPost } from '../actions/auth';
 // import $ from 'jquery';
 
 
@@ -16,7 +16,6 @@ class Login extends React.Component {
     e.preventDefault();
     const email = document.getElementById('logEmail').value;
     const password = document.getElementById('logPassword').value;
-    console.log(email,password);
     dispatch(loginPost(email,password));
   }
 
@@ -27,9 +26,11 @@ class Login extends React.Component {
   }
 
   render() {
+    const { messages } = this.props;
     return (
         <div className="container">
           <form className="form-signin">
+            {messages.error && <div className="alert alert-danger" role="alert">username/password is wrong</div>}
             <label className="sr-only">Email</label>
             <input id="logEmail" type="email" className="form-control" placeholder="Email" name="email" />
             <label className="sr-only">Password</label>
@@ -45,14 +46,9 @@ class Login extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { signupApi } = state;
-  const { meta, isFetching } = signupApi.data || {
-    meta: {},
-    isFetching: false
-  };
+  const { messages } = state;
   return {
-    meta,
-    isFetching
+    messages
   };
 }
 

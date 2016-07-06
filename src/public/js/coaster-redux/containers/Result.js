@@ -40,7 +40,7 @@ function mapStateToProps(state) {
     index = parseInt(str[2]);
   }
   console.log(str);
-  const { signupApi, postsByApi } = state;
+  const { postsByApi } = state;
   const { meta, isFetching, items } = postsByApi.data || {
     meta: {},
     isFetching: false,

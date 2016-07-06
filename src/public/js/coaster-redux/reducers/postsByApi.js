@@ -1,5 +1,3 @@
-import { REQUEST_POSTS, RECEIVE_POSTS, IS_LOGIN } from '../actions/actions';
-
 function posts(state = {
   isFetching: false,
   didInvalidate: false,
@@ -7,13 +5,13 @@ function posts(state = {
   meta:{},
   status: false}, action) {
   switch (action.type) {
-    case REQUEST_POSTS:
+    case 'REQUEST_POSTS':
       return Object.assign({}, state, {
         isFetching: true,
         didInvalidate: false,
         status: false,
       });
-    case RECEIVE_POSTS:
+    case 'RECEIVE_POSTS':
       let meta = action.meta;
       let items = action.posts;
       if (action.status === false) {
@@ -33,10 +31,10 @@ function posts(state = {
   }
 }
 
-export function postsByApi(state = {}, action) {
+export default function postsByApi(state = {}, action) {
   switch (action.type) {
-    case RECEIVE_POSTS:
-    case REQUEST_POSTS:
+    case 'RECEIVE_POSTS':
+    case 'REQUEST_POSTS':
       return Object.assign({}, state, {
         data: posts(state[action.typePaid], action)
       });

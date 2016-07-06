@@ -50,6 +50,29 @@ var findFile = function findFile(params, cb) {
 };
 
 exports.findFile = findFile;
+var deleteFile = function deleteFile(params, cb) {
+  console.log(params.username);
+  File.findOne({ 'meta.username': params.username }, function (err, file) {
+    if (err) return cb(err);
+    for (var i = 0; i < file.data.length; i++) {
+      if (file.data[i].dataIndex === params.dataIndex) {
+        file.data.splice(i, 1);
+        break;
+      }
+    }
+    file.save(function (err, response) {
+      var result = {
+        successfully_deleted: false
+      };
+      if (err) return cb(null, result);
+      result.successfully_deleted = true;
+      cb(null, result);
+      return true;
+    });
+  });
+};
+
+exports.deleteFile = deleteFile;
 var addLinkedin = function addLinkedin(params, cb) {
   console.log(params.username);
   File.findOne({ 'meta.username': params.username }, function (err, file) {

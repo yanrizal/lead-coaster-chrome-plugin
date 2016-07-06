@@ -44,6 +44,19 @@ var _expressSession2 = _interopRequireDefault(_expressSession);
 
 var _configDatabase = require('./config/database');
 
+var _dotenv = require('dotenv');
+
+var _dotenv2 = _interopRequireDefault(_dotenv);
+
+var _jsonwebtoken = require('jsonwebtoken');
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
+var _modelsUser = require('./models/user');
+
+// Load environment variables from .env file
+_dotenv2['default'].load();
+
 var app = (0, _express2['default'])();
 // database connection
 _mongoose2['default'].connect(_configDatabase.dbUrl.url);
@@ -66,6 +79,28 @@ app.use((0, _expressSession2['default'])({ secret: 'ilovescotchscotchyscotchscot
 app.use(_passport2['default'].initialize());
 app.use(_passport2['default'].session()); // persistent login sessions
 app.use((0, _connectFlash2['default'])()); // use connect-flash for flash messages stored in session
+app.use(function (req, res, next) {
+  req.isAuthorized = function () {
+    var token = req.headers.authorization && req.headers.authorization.split(' ')[1] || req.cookies.token;
+    try {
+      return _jsonwebtoken2['default'].verify(token, process.env.TOKEN_SECRET);
+    } catch (err) {
+      //console.log(err);
+      return false;
+    }
+  };
+
+  if (req.isAuthorized()) {
+    var payload = req.isAuthorized();
+    _modelsUser.User.findById(payload.sub, function (err, user) {
+      req.user = user;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect

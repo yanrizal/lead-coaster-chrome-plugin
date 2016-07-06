@@ -9,6 +9,11 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import { dbUrl } from './config/database';
+import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+import { User } from './models/user';
+// Load environment variables from .env file
+dotenv.load();
 
 const app = express();
 // database connection
@@ -32,6 +37,28 @@ app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secre
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
+app.use((req, res, next) => {
+  req.isAuthorized = function() {
+    const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]) || req.cookies.token;
+    try {
+      return jwt.verify(token, process.env.TOKEN_SECRET);
+    } catch (err) {
+      //console.log(err);
+      return false;
+    }
+  };
+
+  if (req.isAuthorized()) {
+    var payload = req.isAuthorized();
+    User.findById(payload.sub, function(err, user) {
+      req.user = user;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect

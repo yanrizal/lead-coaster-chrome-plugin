@@ -5,8 +5,8 @@ import { fetchPosts, postJson } from '../actions/actions';
 import { submitlinkedinAcc } from '../actions/linkedin';
 import TableCoaster from '../components/TableCoaster';
 import swal from 'sweetalert';
-import config from '../config.json'
-// import $ from 'jquery';
+import config from '../config.json';
+
 const URL_POST_STARTBOT = `${config.serverURL}/startapitest`;
 
 class Coaster extends React.Component {
@@ -17,8 +17,8 @@ class Coaster extends React.Component {
 
   componentDidMount(){
     const { dispatch, meta } = this.props;
-    const useremail = document.getElementById('idEmail').value;
-    dispatch(fetchPosts(useremail));
+    const user = localStorage.getItem('user');
+    dispatch(fetchPosts(JSON.parse(user).username));
   }
 
   handleStartClick = e => {
@@ -53,6 +53,13 @@ class Coaster extends React.Component {
     //dispatch(routerActions.push(`/result/${e.id}`));
   }
 
+  handleAddCoaster = e => {
+    const { dispatch } = this.props;
+    dispatch(routerActions.push(`/addcoaster`));
+    return false;
+    //dispatch(routerActions.push(`/result/${e.id}`));
+  }
+
   render() {
     const {items, isFetching , meta, messages} = this.props
     return (
@@ -60,6 +67,8 @@ class Coaster extends React.Component {
         <div className="container">
           <h1>Coaster</h1>
           <a href className="btn btn-primary" data-toggle="modal" data-target="#myModal">linkedin account</a>
+          <a href="javascript:void(0)" className="pull-right" onClick={this.handleAddCoaster}>
+          <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Coaster</a>
           {!isFetching && <TableCoaster items={items} 
           onStartClick={this.handleStartClick} 
           onViewResult={this.handleViewResult} 
@@ -99,7 +108,7 @@ class Coaster extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { signupApi, postsByApi, messages } = state;
+  const { postsByApi, messages } = state;
   const { meta, isFetching, items } = postsByApi.data || {
     meta: {
       linkedin: '',

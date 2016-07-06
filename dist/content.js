@@ -107,7 +107,7 @@
 	    var searchName = document.getElementById('searchName').value;
 	    console.log(value);
 	    $.ajax({
-	      url: 'https://lead-coaster.herokuapp.com/adddata',
+	      url: 'https://lead-coaster.herokuapp.com/api/v1/adddata',
 	      dataType: 'json',
 	      cache: false,
 	      type: 'post',

@@ -33,6 +33,28 @@ export const findFile = (params, cb) => {
   });
 };
 
+export const deleteFile = (params, cb) => {
+  console.log(params.username);
+  File.findOne({ 'meta.username': params.username }, (err, file) => {
+    if (err) return cb(err);
+    for (let i = 0; i < file.data.length; i++) {
+      if (file.data[i].dataIndex === params.dataIndex) {
+        file.data.splice(i, 1);
+        break;
+      }
+    }
+    file.save((err, response) => {
+      const result = {
+        successfully_deleted: false
+      };
+      if (err) return cb(null, result);
+      result.successfully_deleted = true;
+      cb(null, result);
+      return true;
+    });
+  });
+};
+
 export const addLinkedin = (params, cb) => {
   console.log(params.username);
   File.findOne({ 'meta.username': params.username }, (err, file) => {
@@ -81,16 +103,16 @@ export const addFile = (params, cb) => {
       params.data[0].leadCount = 0;
       params.data[0].dataIndex = file.data.length;
       file.data.push(params.data[0]);
-        file.save((err, response) => {
-          console.log(response);
-          const result = {
-            successfully_updated: false
-          };
-          if (err) return cb(null, result);
-          result.successfully_updated = true;
-          cb(null, result);
-          return true;
-        });
+      file.save((err, response) => {
+        console.log(response);
+        const result = {
+          successfully_updated: false
+        };
+        if (err) return cb(null, result);
+        result.successfully_updated = true;
+        cb(null, result);
+        return true;
+      });
     }
   });
 };

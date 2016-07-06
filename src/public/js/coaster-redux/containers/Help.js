@@ -1,8 +1,5 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import { routeActions } from 'react-router-redux';
-// import { fetchPosts, selectedFilter } from '../actions/actions';
-// import $ from 'jquery';
 
 
 class Help extends React.Component {
@@ -23,14 +20,9 @@ class Help extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { signupApi } = state;
-  const { meta, isFetching } = signupApi.data || {
-    meta: {},
-    isFetching: false
-  };
+  const { messages } = state;
   return {
-    meta,
-    isFetching
+    messages
   };
 }
 
