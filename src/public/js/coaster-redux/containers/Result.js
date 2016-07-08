@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import { routeActions } from 'react-router-redux';
 import { fetchPosts } from '../actions/actions';
 import ListUser from '../components/ListUser';
-// import $ from 'jquery';
 
 
 class Result extends React.Component {
@@ -14,8 +12,8 @@ class Result extends React.Component {
 
   componentDidMount(){
     const { dispatch } = this.props;
-    const email = document.getElementById('idEmail').value;
-    dispatch(fetchPosts(email));
+    const user = localStorage.getItem('user');
+    dispatch(fetchPosts(JSON.parse(user).username));
   }
 
   render() {

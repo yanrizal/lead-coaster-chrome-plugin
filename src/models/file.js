@@ -38,7 +38,7 @@ export const deleteFile = (params, cb) => {
   File.findOne({ 'meta.username': params.username }, (err, file) => {
     if (err) return cb(err);
     for (let i = 0; i < file.data.length; i++) {
-      if (file.data[i].dataIndex === params.dataIndex) {
+      if (file.data[i].searchName === params.searchName) {
         file.data.splice(i, 1);
         break;
       }

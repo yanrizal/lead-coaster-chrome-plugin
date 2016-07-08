@@ -47,47 +47,31 @@ module.exports = function (app, passport) {
   app.post('/login-chrome', authController.chromeAuth);
 
   app.get('/', function (req, res) {
-    var user = req.user ? true : false;
-    var email = req.user ? req.user.local.email : '';
-    res.render('index', { title: 'index', user: user, email: email });
+    res.render('index', { title: 'index' });
   });
 
   app.get('/login', function (req, res) {
-    var user = req.user ? true : false;
-    res.render('index', { title: 'login', user: user });
+    res.render('index', { title: 'login' });
   });
 
   app.get('/signup', function (req, res) {
-    var user = req.user ? true : false;
-    res.render('index', { title: 'signup', user: user });
+    res.render('index', { title: 'signup' });
   });
 
   app.get('/help', isLoggedIn, function (req, res) {
-    console.log(req.user);
-    var user = req.user ? true : false;
-    var email = req.user ? req.user.local.email : '';
-    res.render('index', { title: 'Help', user: user, email: email });
+    res.render('index', { title: 'Help' });
   });
 
   app.get('/result/:id', isLoggedIn, function (req, res) {
-    console.log(req.user);
-    var user = req.user ? true : false;
-    var email = req.user ? req.user.local.email : '';
-    res.render('index', { title: 'Result', user: user, email: email });
+    res.render('index', { title: 'Result' });
   });
 
   app.get('/addcoaster', isLoggedIn, function (req, res) {
-    console.log(req.user);
-    var user = req.user ? true : false;
-    var email = req.user ? req.user.local.email : '';
-    res.render('index', { title: 'Coaster Active', user: user, email: email });
+    res.render('index', { title: 'Add Coaster' });
   });
 
   app.get('/coaster/active', isLoggedIn, function (req, res) {
-    console.log(req.user);
-    var user = req.user ? true : false;
-    var email = req.user ? req.user.local.email : '';
-    res.render('index', { title: 'Coaster Active', user: user, email: email });
+    res.render('index', { title: 'Coaster Active' });
   });
 
   app.get('/logout', function (req, res) {

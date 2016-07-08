@@ -1,11 +1,16 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
+import NProgress from 'nprogress-npm';
 
 class Help extends React.Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount(){
+    NProgress.start();
+    NProgress.done();
   }
 
   render() {

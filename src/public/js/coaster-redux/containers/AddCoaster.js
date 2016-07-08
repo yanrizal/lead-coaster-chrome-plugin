@@ -1,9 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { postJson } from '../actions/actions';
+import { addCoaster } from '../actions/coaster';
 import config from '../config.json'
-
-const URL_ADD_DATA = `${config.serverURL}/api/v1/adddata`;
+import NProgress from 'nprogress-npm';
 
 class AddCoaster extends React.Component {
 
@@ -12,14 +11,20 @@ class AddCoaster extends React.Component {
     this.state = { url: '', name: '' };
   }
 
+  componentDidMount(){
+    NProgress.start();
+    NProgress.done();
+  }
+
   handleAddCoaster = e => {
     const { dispatch} = this.props;
+    const user = localStorage.getItem('user');
     const data = {
-      username:username,
-      urlSearch:this.state.name,
-      searchName:this.state.url
+      username:JSON.parse(user).username,
+      urlSearch:this.state.url,
+      searchName:this.state.name
     }
-    dispatch(postJson(URL_ADD_DATA, data));
+    dispatch(addCoaster(data));
   }
 
   handleChange = (event) => {

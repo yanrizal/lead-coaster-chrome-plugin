@@ -2,9 +2,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Navbar from '../components/Navbar';
 import { routerActions } from 'react-router-redux';
-import { isLogin } from '../actions/auth';
-// import $ from 'jquery';
-
 
 class CoasterApp extends React.Component {
 
@@ -14,11 +11,9 @@ class CoasterApp extends React.Component {
 
   componentDidMount(){
     const { dispatch } = this.props;
-    dispatch(isLogin());
   }
 
   handleNavClick = e => {
-    console.log(e);
     const { dispatch } = this.props;
     dispatch(routerActions.push(`/${e.page}`));
   }
@@ -35,9 +30,9 @@ class CoasterApp extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { isLog } = state;
+  const { messages } = state;
   return {
-    isLog
+    messages
   };
 }
 

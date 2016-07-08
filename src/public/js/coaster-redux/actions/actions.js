@@ -19,8 +19,11 @@ function receivePosts(type, json) {
 
 export function fetchPosts(email) {
   return dispatch => {
-    NProgress.start();
+    NProgress.set(0.3);
     dispatch(requestPosts());
+    dispatch({
+      type: 'CLEAR_MESSAGES'
+    });
     return $.ajax({
       url: '/api/v1/getdata',
       dataType: 'json',
@@ -42,7 +45,7 @@ export function fetchPosts(email) {
 
 export function postJson(url, e) {
   return dispatch => {
-    NProgress.start();
+    NProgress.set(0.3);
     dispatch({
       type: 'CLEAR_MESSAGES'
     });

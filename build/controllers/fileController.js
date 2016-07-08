@@ -86,7 +86,7 @@ var linkedinSave = function linkedinSave(req, res) {
 exports.linkedinSave = linkedinSave;
 var deleteData = function deleteData(req, res) {
   var params = {
-    dataIndex: req.body.dataIndex,
+    searchName: req.body.searchName,
     username: req.body.username
   };
   (0, _modelsFile.deleteFile)(params, function (err, response) {

@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { routerActions } from 'react-router-redux';
 import { fetchPosts, postJson } from '../actions/actions';
+import { deleteCoaster } from '../actions/coaster';
 import { submitlinkedinAcc } from '../actions/linkedin';
 import TableCoaster from '../components/TableCoaster';
 import swal from 'sweetalert';
@@ -37,10 +38,10 @@ class Coaster extends React.Component {
 
   handleSaveLkd = e => {
     const { dispatch } = this.props;
-    const useremail = document.getElementById('idEmail').value;
+    const user = localStorage.getItem('user');
     const emailLkd = document.getElementById('emailLkd').value;
     const passwordLkd = document.getElementById('passwordLkd').value;
-    dispatch(submitlinkedinAcc(useremail, emailLkd, passwordLkd))
+    dispatch(submitlinkedinAcc(JSON.parse(user).username, emailLkd, passwordLkd))
   }
 
   handleViewResult = e => {
@@ -50,14 +51,24 @@ class Coaster extends React.Component {
 
   handleDeleteCoaster = e => {
     const { dispatch } = this.props;
-    //dispatch(routerActions.push(`/result/${e.id}`));
+    const user = localStorage.getItem('user');
+    swal({   
+      title: "Are you sure?",   
+      text: "You will not be able to recover this coaster!",   
+      type: "warning",   
+      showCancelButton: true,   
+      confirmButtonColor: "#DD6B55",   
+      confirmButtonText: "Yes, delete it!",   
+      closeOnConfirm: false }, 
+      function(){   
+        dispatch(deleteCoaster(JSON.parse(user).username,e)); 
+      });
   }
 
   handleAddCoaster = e => {
     const { dispatch } = this.props;
     dispatch(routerActions.push(`/addcoaster`));
     return false;
-    //dispatch(routerActions.push(`/result/${e.id}`));
   }
 
   render() {
@@ -69,6 +80,8 @@ class Coaster extends React.Component {
           <a href className="btn btn-primary" data-toggle="modal" data-target="#myModal">linkedin account</a>
           <a href="javascript:void(0)" className="pull-right" onClick={this.handleAddCoaster}>
           <span className="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Coaster</a>
+          <br/>
+          {messages.deleted &&<div className="alert alert-success" role="alert" style={{margin:'10px 0px -20px 0'}}>{messages.deleted}</div>}
           {!isFetching && <TableCoaster items={items} 
           onStartClick={this.handleStartClick} 
           onViewResult={this.handleViewResult} 

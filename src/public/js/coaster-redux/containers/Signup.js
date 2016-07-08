@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import { routeActions } from 'react-router-redux';
 import { signupPost } from '../actions/auth';
-// import $ from 'jquery';
 
 
 class Signup extends React.Component {

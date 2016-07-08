@@ -21,47 +21,31 @@ module.exports = (app, passport) => {
     app.post('/login-chrome', authController.chromeAuth);
 
     app.get('/', (req, res) => {
-      let user = (req.user ? true : false);
-      let email = (req.user ? req.user.local.email : '');
-      res.render('index', { title: 'index', user: user, email: email });
+      res.render('index', { title: 'index'});
     });
 
     app.get('/login', (req, res) => {
-      let user = (req.user ? true : false);
-      res.render('index', { title: 'login', user: user });
+      res.render('index', { title: 'login' });
     });
 
     app.get('/signup', (req, res) => {
-      let user = (req.user ? true : false);
-      res.render('index', { title: 'signup', user: user });
+      res.render('index', { title: 'signup' });
     });
 
     app.get('/help', isLoggedIn, (req, res) => {
-      console.log(req.user);
-      let user = (req.user ? true : false);
-      let email = (req.user ? req.user.local.email : '');
-      res.render('index', { title: 'Help', user: user, email: email });
+      res.render('index', { title: 'Help' });
     });
 
     app.get('/result/:id', isLoggedIn, (req, res) => {
-      console.log(req.user);
-      let user = (req.user ? true : false);
-      let email = (req.user ? req.user.local.email : '');
-      res.render('index', { title: 'Result', user: user, email: email });
+      res.render('index', { title: 'Result'});
     });
 
     app.get('/addcoaster', isLoggedIn, (req, res) => {
-      console.log(req.user);
-      let user = (req.user ? true : false);
-      let email = (req.user ? req.user.local.email : '');
-      res.render('index', { title: 'Coaster Active', user: user, email: email });
+      res.render('index', { title: 'Add Coaster' });
     });
 
     app.get('/coaster/active', isLoggedIn, (req, res) => {
-      console.log(req.user);
-      let user = (req.user ? true : false);
-      let email = (req.user ? req.user.local.email : '');
-      res.render('index', { title: 'Coaster Active', user: user, email: email });
+      res.render('index', { title: 'Coaster Active'});
     });
 
     app.get('/logout', (req, res) => {

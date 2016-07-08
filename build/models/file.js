@@ -55,7 +55,7 @@ var deleteFile = function deleteFile(params, cb) {
   File.findOne({ 'meta.username': params.username }, function (err, file) {
     if (err) return cb(err);
     for (var i = 0; i < file.data.length; i++) {
-      if (file.data[i].dataIndex === params.dataIndex) {
+      if (file.data[i].searchName === params.searchName) {
         file.data.splice(i, 1);
         break;
       }

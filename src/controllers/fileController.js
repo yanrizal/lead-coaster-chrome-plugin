@@ -76,7 +76,7 @@ export const linkedinSave = (req, res) => {
 
 export const deleteData = (req, res) => {
   const params = {
-    dataIndex:req.body.dataIndex,
+    searchName:req.body.searchName,
     username:req.body.username
   };
   deleteFile(params, (err, response) => {
