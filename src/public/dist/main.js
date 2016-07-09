@@ -2175,7 +2175,7 @@
 	
 	function fetchPosts(email) {
 	  return function (dispatch) {
-	    _nprogressNpm2.default.set(0.3);
+	    _nprogressNpm2.default.set(0.2);
 	    dispatch(requestPosts());
 	    dispatch({
 	      type: 'CLEAR_MESSAGES'
@@ -2201,7 +2201,7 @@
 	
 	function postJson(url, e) {
 	  return function (dispatch) {
-	    _nprogressNpm2.default.set(0.3);
+	    _nprogressNpm2.default.set(0.2);
 	    dispatch({
 	      type: 'CLEAR_MESSAGES'
 	    });
@@ -9236,7 +9236,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function loginPost(email, password) {
-	  _nprogressNpm2.default.set(0.4);
+	  _nprogressNpm2.default.set(0);
 	  return function (dispatch) {
 	    dispatch({
 	      type: 'CLEAR_MESSAGES'

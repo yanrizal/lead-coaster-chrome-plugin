@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 import NProgress from 'nprogress-npm';
 
 export function loginPost(email, password) {
-  NProgress.set(0.4);
+  NProgress.set(0);
   return dispatch => {
     dispatch({
       type: 'CLEAR_MESSAGES'

@@ -79,7 +79,7 @@ var addLinkedin = function addLinkedin(params, cb) {
     console.log(file);
     if (err) return cb(err);
     var algorithm = 'aes256';
-    var key = 'password';
+    var key = process.env.TOKEN_SECRET;
     var passwordKey = params.password;
     var cipher = _crypto2['default'].createCipher(algorithm, key);
     var encrypted = cipher.update(passwordKey, 'utf8', 'hex') + cipher.final('hex');

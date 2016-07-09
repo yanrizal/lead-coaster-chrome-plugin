@@ -61,7 +61,7 @@ export const addLinkedin = (params, cb) => {
     console.log(file);
     if (err) return cb(err);
     const algorithm = 'aes256';
-    const key = 'password';
+    const key = process.env.TOKEN_SECRET;
     const passwordKey = params.password;
     const cipher = crypto.createCipher(algorithm, key);
     const encrypted = cipher.update(passwordKey, 'utf8', 'hex') + cipher.final('hex');

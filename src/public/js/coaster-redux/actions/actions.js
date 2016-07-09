@@ -19,7 +19,7 @@ function receivePosts(type, json) {
 
 export function fetchPosts(email) {
   return dispatch => {
-    NProgress.set(0.3);
+    NProgress.set(0.2);
     dispatch(requestPosts());
     dispatch({
       type: 'CLEAR_MESSAGES'
@@ -45,7 +45,7 @@ export function fetchPosts(email) {
 
 export function postJson(url, e) {
   return dispatch => {
-    NProgress.set(0.3);
+    NProgress.set(0.2);
     dispatch({
       type: 'CLEAR_MESSAGES'
     });
