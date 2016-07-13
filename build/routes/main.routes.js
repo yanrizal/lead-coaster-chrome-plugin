@@ -32,12 +32,16 @@ var _controllersAuthController = require('../controllers/authController');
 
 var authController = _interopRequireWildcard(_controllersAuthController);
 
+var _jsonwebtoken = require('jsonwebtoken');
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
 var jsonParser = _bodyParser2['default'].json();
 
 module.exports = function (app, passport) {
 
   app.post('/api/v1/savedata', jsonParser, fileController.saveData);
-  app.post('/api/v1/getdata', jsonParser, isLoggedIn, fileController.getData);
+  app.post('/api/v1/getdata', jsonParser, isAuth, fileController.getData);
   app.post('/api/v1/linkedin/post', jsonParser, fileController.linkedinSave);
   app.post('/api/v1/adddata', jsonParser, fileController.addData);
   app.post('/api/v1/deletedata', jsonParser, fileController.deleteData);
@@ -83,11 +87,28 @@ module.exports = function (app, passport) {
 
 // route middleware to make sure a user is logged in
 var isLoggedIn = function isLoggedIn(req, res, next) {
-
-  // if user is authenticated in the session, carry on
   if (req.isAuthenticated()) return next();
-
-  // if they aren't redirect them to the home page
   res.status(401).send({ msg: 'Unauthorized' });
+};
+
+var isAuth = function isAuth(req, res, next) {
+  var token = req.headers.authorization && req.headers.authorization.split(' ')[1] || req.cookies.token || req.body.token || req.query.token;
+  // decode token
+  if (token) {
+    _jsonwebtoken2['default'].verify(token, process.env.TOKEN_SECRET, function (err, decoded) {
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;
+        next();
+      }
+    });
+  } else {
+    return res.status(403).send({
+      success: false,
+      message: 'No token provided.'
+    });
+  }
 };
 //# sourceMappingURL=main.routes.js.map

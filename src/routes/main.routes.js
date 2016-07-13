@@ -6,12 +6,13 @@ import passport from 'passport';
 import * as fileController from '../controllers/fileController';
 import * as authController from '../controllers/authController';
 const jsonParser = bodyParser.json();
+import jwt from 'jsonwebtoken';
 
 
 module.exports = (app, passport) => {
 
     app.post('/api/v1/savedata', jsonParser, fileController.saveData);
-    app.post('/api/v1/getdata', jsonParser, isLoggedIn, fileController.getData);
+    app.post('/api/v1/getdata', jsonParser, isAuth, fileController.getData);
     app.post('/api/v1/linkedin/post', jsonParser, fileController.linkedinSave);
     app.post('/api/v1/adddata', jsonParser, fileController.addData);
     app.post('/api/v1/deletedata', jsonParser, fileController.deleteData);
@@ -57,13 +58,31 @@ module.exports = (app, passport) => {
 
 // route middleware to make sure a user is logged in
 const isLoggedIn = (req, res, next) => {
-
-    // if user is authenticated in the session, carry on 
     if (req.isAuthenticated())
         return next();
-
-    // if they aren't redirect them to the home page
     res.status(401).send({ msg: 'Unauthorized' });
+}
+
+const isAuth = (req, res, next) => {
+  const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]) || req.cookies.token || req.body.token || req.query.token;
+  // decode token
+  if (token) {
+        jwt.verify(token, process.env.TOKEN_SECRET, function(err, decoded) {      
+          if (err) {
+            return res.json({ success: false, message: 'Failed to authenticate token.' });    
+          } else {
+            // if everything is good, save to request for use in other routes
+            req.decoded = decoded;    
+            next();
+          }
+        });
+      } else {
+        return res.status(403).send({ 
+            success: false, 
+            message: 'No token provided.' 
+        });
+      }
+
 }
 
 
