@@ -124,10 +124,10 @@ app.use(function (req, res, next) {
 //app.all('/api/v1/*', [require('./middlewares/validateRequest')]);
 require('./routes/main.routes.js')(app, _passport2['default']); // load our routes and pass in our app and fully configured passport
 
-app.set('views', _path2['default'].join(__dirname, 'views'));
+app.set('views', _path2['default'].join(__dirname, '../src/views'));
 app.set('view engine', 'hjs');
 // app.use('/', routes);
-app.use(_express2['default']['static'](_path2['default'].join(__dirname, 'public')));
+app.use(_express2['default']['static'](_path2['default'].join(__dirname, '../src/public')));
 app.set('port', process.env.PORT || 3000);
 
 app.listen(app.get('port'), function () {
