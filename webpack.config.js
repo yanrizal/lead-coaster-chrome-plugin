@@ -16,7 +16,7 @@ module.exports = {
     "react-dom": "ReactDOM",
     "jquery": "$"
   },
-  devtool: 'source-map',
+  //devtool: 'source-map',
   module: {
     loaders: [
           { test: /\.json$/, loader: 'json' },
