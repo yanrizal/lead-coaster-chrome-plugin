@@ -44,6 +44,7 @@
     "querystring": "^0.2.0",
     "react": "^15.1.0",
     "react-cookie": "^0.4.7",
+    "react-datepicker": "^0.28.1",
     "react-dom": "^15.1.0",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.1",
@@ -67,12 +68,15 @@
     "babel-preset-react": "^6.0.15",
     "babel-preset-stage-0": "^6.0.15",
     "chalk": "^1.1.1",
+    "css-loader": "^0.23.1",
     "eslint": "^2.4.0",
     "eslint-config-airbnb": "^6.2.0",
     "eslint-plugin-babel": "^3.1.0",
     "eslint-plugin-react": "^4.2.3",
     "json-loader": "^0.5.4",
+    "node-schedule": "^1.1.1",
     "nodemon": "1.8.0",
+    "style-loader": "^0.13.1",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.1"
   }

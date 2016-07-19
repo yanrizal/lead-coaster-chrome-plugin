@@ -15,7 +15,8 @@ export function addCoaster(e) {
       body: JSON.stringify({
         username: e.username,
         urlSearch: e.urlSearch,
-        searchName: e.searchName
+        searchName: e.searchName,
+        startDate: e.startDate
       })
     }).then((response) => {
       console.log(response);

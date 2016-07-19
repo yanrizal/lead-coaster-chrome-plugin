@@ -41,19 +41,11 @@ export const addData = (req, res) => {
   const params = {
     data:[{
       urlSearch: req.body.urlSearch,
-      totalSearch: '0',
-      profileVisit: [],
-      leadCount: 0,
-      dataIndex: 0,
       searchName: req.body.searchName,
-      lastPage: 0
+      startDate: req.body.startDate
     }],
     meta:{
       username: req.body.username,
-      linkedin: {
-        email: '',
-        password: ''
-      }
     }
   };
   addFile(params, (err, response) => {

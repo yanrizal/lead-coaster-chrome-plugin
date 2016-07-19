@@ -49,19 +49,11 @@ var addData = function addData(req, res) {
   var params = {
     data: [{
       urlSearch: req.body.urlSearch,
-      totalSearch: '0',
-      profileVisit: [],
-      leadCount: 0,
-      dataIndex: 0,
       searchName: req.body.searchName,
-      lastPage: 0
+      startDate: req.body.startDate
     }],
     meta: {
-      username: req.body.username,
-      linkedin: {
-        email: '',
-        password: ''
-      }
+      username: req.body.username
     }
   };
   (0, _modelsFile.addFile)(params, function (err, response) {

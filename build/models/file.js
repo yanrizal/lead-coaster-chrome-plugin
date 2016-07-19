@@ -20,19 +20,20 @@ var _assert2 = _interopRequireDefault(_assert);
 
 var fileSchema = new _mongoose2['default'].Schema({
   data: [{
-    dataIndex: { type: Number, max: 2000 },
+    dataIndex: { type: Number, max: 2000, 'default': 0 },
     urlSearch: { type: String },
-    totalSearch: { type: String },
-    leadCount: { type: Number, max: 2000 },
-    profileVisit: { type: Array },
+    totalSearch: { type: String, 'default': '0' },
+    leadCount: { type: Number, max: 2000, 'default': 0 },
+    profileVisit: { type: Array, 'default': [] },
     searchName: { type: String },
-    lastPage: { type: Number }
+    lastPage: { type: Number, 'default': 0 },
+    startDate: { type: String }
   }],
   meta: {
     username: { type: String },
     linkedin: {
-      email: { type: String },
-      password: { type: String }
+      email: { type: String, 'default': '' },
+      password: { type: String, 'default': '' }
     }
   }
 });

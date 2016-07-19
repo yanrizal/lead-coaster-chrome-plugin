@@ -19,6 +19,10 @@ class CoasterApp extends React.Component {
   }
 
   render() {
+    const time = localStorage.getItem('time');
+    if (time < new Date()) {
+        localStorage.clear();
+    }
     const user = localStorage.getItem('user');
     return (
       <div>

@@ -43,7 +43,7 @@ class TableCoaster extends React.Component{
         return(
           <tr id={'tcoaster-'+idx} key={idx}> 
             <th scope="row">{items.searchName}</th> 
-            <td style={{width:'295px',textOverflow:'ellipsis',display:'block',overflow:'hidden',height:'49px'}}><a href={items.urlSearch}>{items.urlSearch}</a></td> 
+            <td style={{width:'295px',textOverflow:'ellipsis',display:'block',overflow:'hidden',height:'58px'}}><a href={items.urlSearch}>{items.urlSearch}</a></td> 
             <td>{lengthPV} views</td> 
             <td>{items.totalSearch}</td> 
             <td>0 Leads</td>

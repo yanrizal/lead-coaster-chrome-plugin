@@ -3,12 +3,16 @@ import { connect } from 'react-redux';
 import { addCoaster } from '../actions/coaster';
 import config from '../config.json'
 import NProgress from 'nprogress-npm';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+
+require('../../../css/react-datepicker.css');
 
 class AddCoaster extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { url: '', name: '' };
+    this.state = { url: '', name: '', startDate: moment() };
   }
 
   componentDidMount(){
@@ -22,13 +26,20 @@ class AddCoaster extends React.Component {
     const data = {
       username:JSON.parse(user).username,
       urlSearch:this.state.url,
-      searchName:this.state.name
+      searchName:this.state.name,
+      startDate:this.state.startDate
     }
     dispatch(addCoaster(data));
   }
 
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleChangeDate = (date) => {
+    this.setState({
+      startDate: date
+    });
   }
 
   render() {
@@ -46,8 +57,9 @@ class AddCoaster extends React.Component {
               <input type="text" name="url" className="form-control" onChange={this.handleChange} value={this.state.url}/>
             </div>
             <div className="form-group">
-              <label>Schedule</label>
-              <input className="form-control" id="exampleInputPassword1" disabled/>
+              <label>Schedule</label><br/>
+              <input type="text" name="url" className="form-control" disabled/>
+              {/*<DatePicker className="form-control" selected={this.state.startDate} onChange={this.handleChangeDate} />*/}
             </div>
             <a href="javascript:void(0)" onClick={this.handleAddCoaster} className="btn btn-success">Add Coaster</a>
           </form>

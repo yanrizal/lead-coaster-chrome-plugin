@@ -26,7 +26,10 @@ export function loginPost(email, password) {
             username: json.username
           });
         NProgress.done();
+        let oneday = new Date();
+        let d1 = new Date();
         localStorage.setItem('user', JSON.stringify(json));
+        localStorage.setItem('time', oneday.setHours(d1.getHours() + 24))
         cookie.save('token', json.token);
         browserHistory.push('/help');
         //window.location.href = '/help';

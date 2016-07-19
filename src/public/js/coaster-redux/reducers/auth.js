@@ -1,5 +1,6 @@
+const storage = localStorage.getItem('user');
 const initialState = {
-  token: null,
+  token: JSON.parse(storage).token || null,
   user: {}
 };
 
