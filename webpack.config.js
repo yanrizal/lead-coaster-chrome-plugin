@@ -1,8 +1,9 @@
 var path = require('path');
 var webpack = require('webpack');
+const PROD = JSON.parse(process.env.PROD_DEV || '0');
 
 module.exports = {
-  devtool: 'eval',
+  //devtool: 'eval',
   entry: {
     "src/public/dist/main" : "./src/public/js/coaster-redux/index.js",
     "dist/content": "./chrome-extension/content.js"
@@ -20,6 +21,7 @@ module.exports = {
   module: {
     loaders: [
           { test: /\.json$/, loader: 'json' },
+          { test: /\.css$/, loader: "style-loader!css-loader" },
           {
             test: /\.js?$/, 
             loader: 'babel-loader',
@@ -29,5 +31,15 @@ module.exports = {
             }
           }
     ]
-  }
+  },
+  plugins: PROD ? [
+    new webpack.optimize.UglifyJsPlugin({ minimize: true }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"production"',
+    })
+  ] : [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': '"development"',
+    })
+  ]
 };
