@@ -3119,7 +3119,7 @@
 	exports.isLog = isLog;
 	var storage = localStorage.getItem('user');
 	var initialState = {
-	  token: JSON.parse(storage).token || null,
+	  token: null,
 	  user: {}
 	};
 	
